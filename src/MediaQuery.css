@@ -1,0 +1,20 @@
+@media screen and (min-width: 885px) {
+  .header__nav--trigger {
+    display: none;
+  }
+
+  .header__nav--list {
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70%;
+    width: 100%;
+    top: -5px;
+    background: none;
+  }
+
+  .header__nav--list li:hover {
+    background: none;
+  }
+}

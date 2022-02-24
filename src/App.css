@@ -1,0 +1,601 @@
+:root {
+  --backgroundDark: rgb(24, 24, 24);
+  --backgroundDarker: rgb(20, 20, 20);
+  --greyTransparent: rgba(20, 20, 20, 0.973);
+}
+
+/* fonts */
+
+@font-face {
+  font-family: "NetflixSansBold";
+  src: url(./assets/fonts/NetflixSansBold.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "NetflixSansRegular";
+  src: url(./assets/fonts/NetflixSansRegular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "NetflixSansThin";
+  src: url(./assets/fonts/NetflixSansThin.ttf) format("truetype");
+}
+
+/* ///// --- [ DEFAULT ] --- ///// */
+* {
+  font-size: 16px;
+  font-family: "NetflixSansRegular";
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: white;
+  background-color: var(--backgroundDark);
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* --- --- [ HEADER ] --- --- */
+header {
+  padding: 1% 1% 0 1%;
+  background: linear-gradient(to top, transparent 0%, black 30%);
+  position: fixed;
+  top: 0;
+  height: 50px;
+  width: 100vw;
+  z-index: 2;
+  display: flex;
+}
+
+.header__logo {
+  width: 10%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.header__logo > img {
+  width: 100%;
+  max-width: 150px;
+  cursor: pointer;
+}
+
+/* --- --- [ NAV ] --- --- */
+
+nav {
+  margin-left: 5%;
+  width: 30%;
+  position: relative;
+  top: 0px;
+  left: 0;
+}
+
+.header__nav--list {
+  width: 80%;
+  padding: 5px;
+  position: absolute;
+  left: -50px;
+  background-color: var(--greyTransparent);
+  display: none;
+  z-index: 10;
+}
+
+.header__nav--list li {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px 0;
+  display: block;
+  text-align: center;
+}
+
+.header__nav--list li:hover {
+  background-color: #252222;
+}
+
+.header__nav--trigger {
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  padding: 10px 0;
+}
+
+@media screen and (max-width: 884px) {
+  .header__nav--trigger:hover ~ .header__nav--list,
+  .header__nav--list:hover {
+    display: block;
+  }
+}
+
+/* --- --- [ SEARCH ] --- --- */
+
+.header__searchBar--container {
+  height: 45px;
+  width: 250px;
+  top: 10px;
+  right: 100px;
+  display: flex;
+  position: absolute;
+}
+
+.focus__style {
+  border: white 2px solid;
+  border-radius: 5px;
+  background-color: var(--backgroundDark);
+  width: 370px;
+}
+
+.searchBar__btn {
+  position: absolute;
+  right: 0px;
+  z-index: 5;
+  height: 100%;
+  width: 50px;
+  background: transparent;
+  border: none;
+}
+
+.searchBar__icon {
+  height: 50%;
+  width: 100%;
+}
+
+.searchBar__btn:focus + .searchBar__input {
+  width: 370px;
+}
+
+.searchBar__input:focus {
+  width: 370px;
+}
+
+.searchBar__input {
+  background: none;
+  padding-inline: 10px;
+  border: none;
+  height: 100%;
+  width: 0;
+  z-index: 4;
+}
+
+.searchBar__input[type="text"] {
+  color: white;
+}
+
+.searchBar__input::placeholder {
+  padding-left: 5px;
+  font-size: 0.9em;
+}
+
+/* --- --- [ SEARCH RESULTS ] --- --- */
+
+.search__results--container {
+  padding: 50px;
+}
+
+.search__results {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px 40px 0 0;
+}
+
+.search__results > div {
+  padding: 10px;
+}
+
+.search__results--heading {
+  font-family: "NetflixSansBold";
+  font-size: 2em;
+  padding-left: 20px;
+}
+
+/* --- --- [ HOMEPAGE ] --- --- */
+main {
+  margin-top: 4%;
+}
+
+/* --- --- [ banners ] --- --- */
+
+.main__banner--container {
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-inline: 20px;
+}
+
+.main__banner--details,
+.main__banner--container > img {
+  width: 100%;
+}
+
+.main__banner--details {
+  /* height: 220px; */
+  position: absolute;
+  bottom: 150px;
+  left: 0px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--backgroundDark) 90%
+  );
+}
+
+.main__banner--heading,
+.main__banner--bottom {
+  padding: 5px 20px;
+}
+
+.bottom--inline {
+  display: flex;
+  width: 40%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.main__banner--heading {
+  font-size: 3em;
+  text-shadow: 0 0 5px black;
+  position: absolute;
+  bottom: 50%;
+}
+.main__banner--bottom {
+  position: absolute;
+  bottom: 30%;
+}
+
+.main__banner--infoBtn {
+  width: 180px;
+  height: 50px;
+  background-color: rgba(77, 77, 77, 0.623);
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 1.1em;
+  font-family: "NetflixSansBold";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main__banner--infoBtn::before {
+  content: "\1f6c8";
+  color: white;
+  font-size: 2em;
+  padding-right: 10px;
+}
+
+.main__banner--infoBtn:hover {
+  background-color: rgba(56, 56, 56, 0.623);
+  cursor: pointer;
+}
+
+/* --- --- [ slider ] --- --- */
+
+.home__sliders {
+  overflow-x: auto;
+  display: flex;
+  padding: 20px;
+}
+
+.home__sliders::-webkit-scrollbar-track {
+  background-color: var(--backgroundDark);
+}
+
+.home__sliders::-webkit-scrollbar {
+  height: 6px;
+  background-color: var(--backgroundDark);
+}
+
+.home__sliders::-webkit-scrollbar-thumb {
+  background-color: #000000;
+}
+
+.show__thumbnail {
+  cursor: pointer;
+}
+
+.main__homepage {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* .main__homepage--lists {
+  position: absolute;
+} */
+
+.main__homepage--lists > h2 {
+  margin: 40px 25px 0 25px;
+  font-size: 1.5em;
+  font-weight: normal;
+  font-family: "NetflixSansBold";
+}
+
+/* --- --- [ MOVIE THUMBNAIL ] --- --- */
+.thumbnail__container {
+  width: 170px;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.thumbnail__container:hover {
+  background-color: var(--greyTransparent);
+  box-shadow: 0px 6px 11px 7px rgba(0, 0, 0, 0.986);
+}
+
+.thumbnail__container:hover .thumbnail__details--wrapper {
+  /* display: block; */
+  visibility: visible;
+  background-color: var(--greyTransparent);
+}
+
+.thumbnail__img {
+  width: 170px;
+}
+.thumbnail__title {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.2em;
+}
+
+.thumbnail__bottom {
+  display: flex;
+}
+
+.thumbnail__bottom > p {
+  margin: 5px 15px 5px 5px;
+}
+
+.thumbnail__details--wrapper {
+  background-color: var(--backgroundDarker);
+  height: 100px;
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  visibility: hidden;
+  /* display: none; */
+}
+
+/* --- --- [ GENRES ] --- --- */
+.genre__list {
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.genre--box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  font-size: 1.2em;
+  font-family: "NetflixSansThin";
+  letter-spacing: 2px;
+  text-align: center;
+  cursor: pointer;
+
+  height: 100px;
+  width: 200px;
+  margin: 10px;
+
+  border: solid rgba(255, 255, 255, 0.781) 2px;
+  border-radius: 10px;
+  background-color: rgba(66, 64, 64, 0.205);
+}
+
+/* --- --- [ MOVIE PAGE ] --- --- */
+
+.movie__container {
+  background-color: var(--backgroundDarker);
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  top: 10px;
+  overflow: auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 0;
+}
+
+/* --- [ movie recs ] ---  */
+.movie_recs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* --- [ poster and headings container ] ---  */
+
+.movie__backdrop {
+  width: 75%;
+  height: 550px;
+  background-color: var(--backgroundDarker);
+}
+
+.movie__backdrop > img {
+  width: 100%;
+}
+
+.backdrop__alt {
+  width: 100%;
+  height: 750px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- [ title and buttons ] ---  */
+
+.movie__headings {
+  padding: 0 40px;
+  background-color: none;
+  position: relative;
+  top: -200px;
+}
+
+.movie__headings > h2 {
+  font-size: 2.5em;
+  text-shadow: 0 0 2px black;
+  line-height: 45px;
+  margin: 20px 0;
+}
+
+/* --- [ movie details container ] ---  */
+
+.movie__details {
+  display: flex;
+  justify-content: space-between;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--backgroundDark) 35%
+  );
+  width: 75%;
+}
+
+.movie__right,
+.movie__left {
+  margin-top: 10%;
+  background: none;
+}
+
+.movie__right {
+  width: 30%;
+}
+
+.movie__left {
+  width: 70%;
+}
+
+.movie__left > *,
+.movie__right > * {
+  padding: 20px 20px 0 40px;
+}
+
+/* --- [ movie left - list ] ---  */
+
+.movie__left > ul {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+/* --- [ movie right - genres ] ---  */
+
+.right--wrapper {
+  display: flex;
+}
+
+.movie__genre {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.movie__genre > li {
+  padding: 0 5px;
+}
+
+.movie__genre > li:not(:last-child):after {
+  content: "\002C";
+  color: white;
+}
+
+/* --- [ BUTTONS ] ---  */
+
+.btn--circle {
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.btn__exit {
+  position: relative;
+  top: 15%;
+  left: 95%;
+  border: rgb(15, 15, 15) solid 2px;
+  background: rgb(15, 15, 15);
+}
+
+.movie__btns {
+  display: flex;
+  justify-content: space-between;
+  width: 260px;
+}
+.movie__btn--play::before {
+  content: "\25B6";
+  padding-right: 15px;
+  font-size: 1.7em;
+}
+
+.movie__btn--play {
+  background-color: white;
+  color: black;
+  font-weight: bolder;
+  font-size: 1.2em;
+  padding: 0px 20px;
+  border: none;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.movie__btn--add,
+.movie__btn--like,
+.movie__btn--dislike {
+  border: rgba(211, 208, 208, 0.623) solid 2px;
+  background: rgba(37, 37, 37, 0.404);
+}
+
+/* --- [ VIDEOS ] ---  */
+.movie__videos {
+  background-color: var(--backgroundDark);
+  width: 75%;
+}
+
+.movie__videos h3 {
+  padding: 40px 0 20px 40px;
+  font-size: 2em;
+}
+.movie__trailers {
+  width: 1000px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.trailer--content {
+  margin: 10px;
+}
