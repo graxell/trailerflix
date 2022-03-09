@@ -1,13 +1,19 @@
-<img className="searchBar__icon" src={searchIcon} alt="search icon" />;
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Search from "./components/Search";
 import ShowInfo from "./pages/ShowInfo";
 import Homepage from "./pages/Homepage";
-import SearchResults from "./pages/SearchResults";
+import NavBar from "./components/NavBar";
+import Categories from "./pages/Categories";
+import ListResult from "./pages/ListResult";
+// import SearchResults from "./pages/SearchResults";
 import logo from "./assets/images/logo.png";
 import "./App.css";
+import "./MediaQuery.css";
+import NewAndPopular from "./pages/NewAndPopular";
+import MyWatchList from "./pages/MyWatchList";
+
+//   ---- [ FUNCTION START ] ----   //
 
 function App() {
   const API_KEY = "api_key=887d05f637b9e4864f8cec83c7da0a1f";
@@ -19,11 +25,16 @@ function App() {
   const [searchInput, setSearchInput] = useState();
   const [showList, setShowList] = useState();
   const [show, setShow] = useState();
+  const [banner, setBanner] = useState();
   const [recs, setRecs] = useState();
-
+  const [genres, setGenres] = useState({ genreList: {}, mediaType: "" });
+  const [listDetails, setListDetails] = useState();
   const [screen, setScreen] = useState(0);
+  const [myList, setMyList] = useState([]);
+  const [addBtn, setAddBtn] = useState(false);
 
   //  ---- [ HOMEPAGE STATES ] ----  //
+
   const [trending, setTrending] = useState();
   const [popularMovies, setPopularMovies] = useState();
   const [popularSeries, setPopularSeries] = useState();
@@ -36,24 +47,27 @@ function App() {
     getPopularMovies();
     topMovies();
     topSeries();
+    getItem();
   }, []);
 
-  const [homePageLists, setHomePageLists] = useState();
+  useEffect(() => {
+    extractBanner(trending);
+  }, [trending]);
 
-  const multiApi = async () => {
-    try {
-      const api1 = await axios.get(TRENDING_URL);
-      const api2 = await axios.get(TRENDING_URL);
-      const api3 = await axios.get(TRENDING_URL);
-      const api4 = await axios.get(TRENDING_URL);
-      const api5 = await axios.get(TRENDING_URL);
-      setHomePageLists({ trending: api1, popular: api2 });
-    } catch (error) {
-      console.log(error);
-    }
+  const getItem = () => {
+    const savedList = JSON.parse(localStorage.getItem("personalShowList"));
+
+    setMyList(savedList);
+    console.log(savedList);
   };
 
-  ///// --- [  HOMEPAGE - TRENDING SHOWS  ] --- /////
+  const addBtnToggle = () => {
+    setAddBtn(!addBtn);
+  };
+
+  //// ----  [  HOMEPAGE - API CALLS  ]  ---- ////
+
+  // --- [  Trending shows ] --- //
   const trendingShows = async () => {
     const TRENDING_URL =
       ENDPOINT_URL + "trending/all/day?" + API_KEY + DEFAULT_PARAM;
@@ -67,7 +81,7 @@ function App() {
     }
   };
 
-  ///// --- [ HOMEPAGE - POPULAR - MUST WATCH FILMS ] --- /////
+  // --- [ Popular - MUST WATCH FILMS ] --- //
   const getPopularMovies = async () => {
     const POPULAR_MOVIES_URL =
       ENDPOINT_URL + "movie/popular?" + API_KEY + DEFAULT_PARAM;
@@ -81,7 +95,7 @@ function App() {
     }
   };
 
-  ///// --- [ HOMEPAGE - POPULAR SERIES ] --- /////
+  // --- [ Popular SERIES ] --- //
   const getPopularSeries = async () => {
     const POPULAR_SERIES_URL =
       ENDPOINT_URL + "tv/popular?" + API_KEY + DEFAULT_PARAM;
@@ -95,7 +109,7 @@ function App() {
     }
   };
 
-  ///// --- [ HOMEPAGE - TOP RATED MOVIES - DISCOER FILMS ] --- /////
+  // --- [ Top Rated Movies - DISCOVER FILMS ] --- //
   const topMovies = async () => {
     const TOP_MOVIES_URL =
       ENDPOINT_URL + "movie/top_rated?" + API_KEY + DEFAULT_PARAM;
@@ -109,7 +123,7 @@ function App() {
     }
   };
 
-  ///// --- [ HOMEPAGE - TOP RATED SERIES ] --- /////
+  // --- [ Top Rated SERIES ] --- //
   const topSeries = async () => {
     const TOP_SERIES_URL =
       ENDPOINT_URL + "tv/top_rated?" + API_KEY + DEFAULT_PARAM;
@@ -123,7 +137,17 @@ function App() {
     }
   };
 
-  //   ---- [ SHOWINFO - MOVIE/TV INFORMATION PAGE ] ----   //
+  // --- [ extractBanner ] --- //
+  const extractBanner = async (showList) => {
+    if (showList) {
+      const bannerShow = showList[Math.floor(Math.random() * showList.length)];
+      setBanner(bannerShow);
+      console.log(bannerShow);
+    }
+  };
+  //// ----  [  FUNCTIONS TO GET MORE INFO ABOUT SHOW  ]  ---- ////
+
+  //   --- [ SHOWINFO - movie/tv information page] ---   //
   const getMovieDetails = async (mediaType, movieId) => {
     const movieURL =
       ENDPOINT_URL +
@@ -141,7 +165,7 @@ function App() {
     }
   };
 
-  //   ---- [ MORE LIKE THIS - MOVIE RECS BASED ON CHOSEN FILM ] ----   //
+  //   ---- [ MORE LIKE THIS - movie recommendation based on chose film ] ----   //
   const getMovieRecs = async (mediaType, movieId) => {
     const movieRecURL =
       ENDPOINT_URL +
@@ -158,7 +182,44 @@ function App() {
     }
   };
 
-  //   ---- [ SEARCH ENGINE ] ----   //
+  //   ---- [ Get List of Genres ] ----   //
+  const getGenres = async (mediaType) => {
+    const GENRE_URL =
+      ENDPOINT_URL + `genre/${mediaType}/list?` + API_KEY + DEFAULT_PARAM;
+
+    try {
+      const response = await axios.get(GENRE_URL);
+      setGenres({ genreList: response.data.genres, mediaType: mediaType });
+      setScreen(3);
+      console.log(response.data.genres);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  //   ---- [ Get shows of the chosen genre ] ----   //
+  const getShowsByGenre = async (mediaType, id, genre) => {
+    const GENRE_URL =
+      ENDPOINT_URL +
+      `discover/${mediaType}?` +
+      API_KEY +
+      `&with_genres=${id}` +
+      DEFAULT_PARAM;
+
+    try {
+      const response = await axios.get(GENRE_URL);
+      setShowList(response.data.results);
+      setListDetails({ genreName: genre, mediaType: mediaType });
+      setScreen(1);
+      setSearchInput();
+      console.log(response.data.results);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  //// ----  [ SEARCH ENGINE FUNCTIONS]  ---- ////
+
   const search = async () => {
     const searchURL =
       ENDPOINT_URL +
@@ -181,7 +242,7 @@ function App() {
     setSearchInput(e.target.value);
   };
 
-  //   ---- [ SETTING SCREENS ] ----   //
+  //// ----  [ SETTING SCREEN FUNCTIONS]  ---- ////
   const handleExitBtn = () => {
     if (showList) {
       setScreen(1);
@@ -203,69 +264,58 @@ function App() {
     <>
       <header>
         <h1 className="header__logo">
-          <img onClick={getHomepage} src={logo} alt="logo" />
+          <img
+            onClick={() => {
+              getHomepage();
+              extractBanner(trending);
+            }}
+            src={logo}
+            alt="logo"
+          />
         </h1>
 
-        <nav>
-          <ul>
-            <li onClick={getHomepage}>Home</li>
-            <li
-              onClick={() => {
-                console.log("Series button clicked");
-              }}
-            >
-              Series
-            </li>
-            <li
-              onClick={() => {
-                console.log("Films button clicked");
-              }}
-            >
-              Films
-            </li>
-            <li
-              onClick={() => {
-                console.log("New & Popular button clicked");
-              }}
-            >
-              New & Popular
-            </li>
-            <li
-              onClick={() => {
-                console.log("My List button clicked");
-              }}
-            >
-              My List
-            </li>
-          </ul>
-        </nav>
+        <NavBar
+          getHomepage={getHomepage}
+          extractBanner={extractBanner}
+          getGenres={getGenres}
+          setScreen={setScreen}
+          trending={trending}
+          popularMovies={popularMovies}
+          popularSeries={popularSeries}
+          getItem={getItem}
+        />
 
         <Search
           search={search}
           searchInput={searchInput}
           handleInput={handleInput}
+          setSearchInput={setSearchInput}
         />
       </header>
 
       <main>
         {screen === 0 && (
           <Homepage
+            bannerShow={banner}
+            screen={screen}
             trending={trending}
             popularMovies={popularMovies}
             popularSeries={popularSeries}
             topRatedMovies={topRatedMovies}
             topRatedSeries={topRatedSeries}
+            setScreen={setScreen}
             getMovieDetails={getMovieDetails}
             getRecs={getMovieRecs}
           />
         )}
 
         {screen === 1 && showList && (
-          <SearchResults
+          <ListResult
             showList={showList}
+            listDetails={listDetails}
+            searchInput={searchInput}
             getMovieDetails={getMovieDetails}
             getRecs={getMovieRecs}
-            searchInput={searchInput}
           />
         )}
 
@@ -273,17 +323,36 @@ function App() {
           <ShowInfo
             recs={recs}
             show={show}
+            screen={screen}
             exit={handleExitBtn}
+            getMovieDetails={getMovieDetails}
+            getRecs={getMovieRecs}
+            setMyList={setMyList}
+            myList={myList}
+          />
+        )}
+
+        {screen === 3 && (
+          <Categories
+            bannerShow={banner}
+            screen={screen}
+            genres={genres}
+            getShowsByGenre={getShowsByGenre}
             getMovieDetails={getMovieDetails}
             getRecs={getMovieRecs}
           />
         )}
 
-        {screen === 3 && show && (
-          <ShowInfo
-            recs={recs}
-            show={show}
-            exit={handleExitBtn}
+        {screen === 4 && (
+          <NewAndPopular
+            getMovieDetails={getMovieDetails}
+            getRecs={getMovieRecs}
+          />
+        )}
+
+        {screen === 5 && (
+          <MyWatchList
+            myList={myList}
             getMovieDetails={getMovieDetails}
             getRecs={getMovieRecs}
           />

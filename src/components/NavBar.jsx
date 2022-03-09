@@ -6,20 +6,19 @@ const Navbar = (props) => {
     extractBanner,
     getGenres,
     setScreen,
-    trending,
-    popularMovies,
-    popularSeries,
+    homepageLists,
+    getItem,
   } = props;
 
   return (
     <>
       <nav>
         <button className="header__nav--trigger">Browse &#x25BC;</button>
-        <ul className="header__nav--list">
+        <ul className="header__nav__menu">
           <li
             onClick={() => {
               getHomepage();
-              extractBanner(trending);
+              extractBanner(homepageLists.trending);
             }}
           >
             Home
@@ -27,7 +26,7 @@ const Navbar = (props) => {
           <li
             onClick={() => {
               getGenres("tv");
-              extractBanner(popularSeries);
+              extractBanner(homepageLists.popularSeries);
             }}
           >
             Series
@@ -35,21 +34,21 @@ const Navbar = (props) => {
           <li
             onClick={() => {
               getGenres("movie");
-              extractBanner(popularMovies);
+              extractBanner(homepageLists.popularMovies);
             }}
           >
             Films
           </li>
           <li
             onClick={() => {
-              setScreen(5);
+              setScreen(4);
             }}
           >
             New & Popular
           </li>
           <li
             onClick={() => {
-              console.log("My List button clicked");
+              setScreen(5);
             }}
           >
             My List

@@ -1,23 +1,23 @@
-import Image from "./Image";
 import Details from "./Details";
+import poster_Alt from "../assets/images/poster_Alt.png";
 
 const ShowThumbnail = (props) => {
   const { showList, getMovieDetails, getRecs } = props;
 
-  //
-  const runShowDetails = (mediaType, movieId) => {
-    getMovieDetails(mediaType, movieId);
-    getRecs(mediaType, movieId);
-  };
-
-  //handles what to run depending on media type
+  //handles api call depending on media type
   const mediaTypeHandler = (title, movieId) => {
     if (title) {
-      runShowDetails("tv", movieId);
+      getMovieDetails("tv", movieId);
+      getRecs("tv", movieId);
     } else {
-      runShowDetails("movie", movieId);
+      getMovieDetails("movie", movieId);
+      getRecs("movie", movieId);
     }
   };
+
+  // const showListChecked = Array.isArray(showList)
+  //   ? showList
+  //   : Object.keys(showList).map((key) => showList[key]);
 
   const thumbnail = () => {
     return (
@@ -37,6 +37,8 @@ const ShowThumbnail = (props) => {
         } = show;
 
         const showTitle = title ? title : name;
+        const posterURL = `https://image.tmdb.org/t/p/original/${poster_path}`;
+        const posterImg = poster_path ? posterURL : poster_Alt;
 
         return (
           media_type !== "person" && (
@@ -45,7 +47,7 @@ const ShowThumbnail = (props) => {
               className="thumbnail__container"
               onClick={() => mediaTypeHandler(name, id)}
             >
-              <Image id={id} poster={poster_path} title={showTitle} />
+              <img src={posterImg} alt={title} className="thumbnail__img" />
 
               <Details
                 title={showTitle}
@@ -54,7 +56,9 @@ const ShowThumbnail = (props) => {
                 releaseDate={
                   first_air_date
                     ? first_air_date.substring(0, 4)
-                    : release_date.substring(0, 4)
+                    : release_date
+                    ? release_date.substring(0, 4)
+                    : "Unknown"
                 }
               />
             </div>

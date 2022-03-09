@@ -3,6 +3,87 @@
   --backgroundDarker: rgb(20, 20, 20);
 }
 
+/* --- --- [ banners ] --- --- */
+
+.banner--container {
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-inline: 20px;
+}
+
+.banner__details--wrapper,
+.banner__img {
+  width: 100%;
+}
+
+.banner__details--wrapper {
+  /* height: 220px; */
+  position: absolute;
+  bottom: 150px;
+  left: 0px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--backgroundDark) 90%
+  );
+}
+
+.banner__details {
+  position: absolute;
+  bottom: 20%;
+  width: 100%;
+}
+
+.banner__heading,
+.banner__bottom {
+  padding: 5px 50px;
+}
+
+.banner__bottom--inline {
+  display: flex;
+  width: 40%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.banner__heading {
+  font-size: 3em;
+  text-shadow: 0 0 5px black;
+}
+
+.banner__infoBtn {
+  width: 180px;
+  height: 50px;
+  background-color: rgba(77, 77, 77, 0.623);
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 1.1em;
+  font-family: "NetflixSansBold";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner__infoBtn::before {
+  content: "\1f6c8";
+  color: white;
+  font-size: 2em;
+  padding-right: 10px;
+}
+
+.banner__infoBtn:hover {
+  background-color: rgba(56, 56, 56, 0.623);
+  cursor: pointer;
+}
+
 /* fonts */
 
 @font-face {

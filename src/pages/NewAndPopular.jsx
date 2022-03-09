@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ShowThumbnail from "../components/ShowThumbnail";
 
 const NewAndPopular = (props) => {
+  const { getMovieDetails, getRecs, addToList, removeFromList } = props;
   const API_KEY = "api_key=887d05f637b9e4864f8cec83c7da0a1f";
   const ENDPOINT_URL = "https://api.themoviedb.org/3/";
   const DEFAULT_PARAM =
@@ -80,8 +81,10 @@ const NewAndPopular = (props) => {
           {airingToday ? (
             <ShowThumbnail
               showList={airingToday}
-              getMovieDetails={props.getMovieDetails}
-              getRecs={props.getRecs}
+              getMovieDetails={getMovieDetails}
+              getRecs={getRecs}
+              addToList={addToList}
+              removeFromList={removeFromList}
             />
           ) : (
             <div>Loading</div>
@@ -93,8 +96,10 @@ const NewAndPopular = (props) => {
           {onGoingTV ? (
             <ShowThumbnail
               showList={onGoingTV}
-              getMovieDetails={props.getMovieDetails}
-              getRecs={props.getRecs}
+              getMovieDetails={getMovieDetails}
+              getRecs={getRecs}
+              addToList={addToList}
+              removeFromList={removeFromList}
             />
           ) : (
             <div>Loading</div>
@@ -106,8 +111,10 @@ const NewAndPopular = (props) => {
           {upcomingMovies ? (
             <ShowThumbnail
               showList={upcomingMovies}
-              getMovieDetails={props.getMovieDetails}
-              getRecs={props.getRecs}
+              getMovieDetails={getMovieDetails}
+              getRecs={getRecs}
+              addToList={addToList}
+              removeFromList={removeFromList}
             />
           ) : (
             <div>Loading</div>
@@ -119,8 +126,8 @@ const NewAndPopular = (props) => {
           {latestMovies ? (
             <ShowThumbnail
               showList={latestMovies}
-              getMovieDetails={props.getMovieDetails}
-              getRecs={props.getRecs}
+              getMovieDetails={getMovieDetails}
+              getRecs={getRecs}
             />
           ) : (
             <div>Loading</div>

@@ -2,32 +2,46 @@ import React from "react";
 import ShowThumbnail from "../components/ShowThumbnail";
 import Runtime from "../components/Runtime";
 import Video from "../components/Video";
+import DetailList from "../components/DetailList";
+import Banner from "../components/Banner";
 
 const ShowInfo = (props) => {
-  //destructure props.show
+  //destructure lists
+  const {
+    screen,
+    recs,
+    show,
+    exit,
+    getMovieDetails,
+    getRecs,
+    setMyList,
+    myList,
+  } = props;
+
   const {
     id,
-    first_air_date,
-    release_date,
     title,
     name,
-    backdrop_path,
+    first_air_date,
+    release_date,
     vote_average,
     runtime,
     videos,
     genres,
     overview,
     number_of_seasons,
-    tagline,
-  } = props.show;
-
-  // backdrop path
-  const backdropURL = `https://image.tmdb.org/t/p/original/${backdrop_path}`;
+    credits,
+    networks,
+    created_by,
+    production_companies,
+  } = show;
 
   //show release year only
   const releaseYear = first_air_date
     ? first_air_date.substring(0, 4)
-    : release_date.substring(0, 4);
+    : release_date
+    ? release_date.substring(0, 4)
+    : "Unknown";
 
   //handling show duration
   const duration = () => {
@@ -40,72 +54,27 @@ const ShowInfo = (props) => {
     }
   };
 
-  //handling recommendation list
-  const displayRecsHandler = () =>
-    props.recs && props.recs.length > 0 ? "block" : "none";
-
-  //checking if data is film or tv to display title
+  //handling show title
   const showTitle = title ? title : name;
+
+  //handling recommendation list
+  const displayRecsHandler = () => (recs && recs.length > 0 ? "block" : "none");
 
   return (
     <>
       {/* top of the page - poster & titles */}
-      <div key={id} className="movie__container">
-        <div className="movie__backdrop">
-          <button className="btn--circle btn__exit" onClick={props.exit}>
-            &#10005;
-          </button>
-
-          {backdrop_path ? (
-            <img src={backdropURL} alt={showTitle} />
-          ) : (
-            <div className="backdrop__alt">No available backdrop poster!</div>
-          )}
-
-          {/* top section - buttons */}
-          <div className="movie__headings">
-            {tagline && <p>{tagline}</p>}
-            <h2>{showTitle}</h2>
-            <div className="movie__btns">
-              <button
-                className="movie__btn--play"
-                onClick={() => {
-                  console.log("Play Button was clicked!");
-                }}
-              >
-                Play
-              </button>
-              <button
-                className="movie__btn--add btn--circle"
-                onClick={() => {
-                  console.log("Add Button was clicked!");
-                }}
-              >
-                &#43;
-              </button>
-              <button
-                className="movie__btn--like btn--circle"
-                onClick={() => {
-                  console.log("Like Button was clicked!");
-                }}
-              >
-                &#128077;
-              </button>
-              <button
-                className="movie__btn--dislike btn--circle"
-                onClick={() => {
-                  console.log("Dislike Button was clicked!");
-                }}
-              >
-                &#128078;
-              </button>
-            </div>
-          </div>
-        </div>
+      <div key={id} className="showInfo__container">
+        <Banner
+          screen={screen}
+          bannerShow={show}
+          exit={exit}
+          setMyList={setMyList}
+          myList={myList}
+        />
 
         {/* second section - small show info */}
-        <div className="movie__details">
-          <div className="movie__left">
+        <div className="showInfo__details">
+          <div className="showInfo__left">
             <ul>
               <li>{releaseYear}</li>
               <li>{duration()}</li>
@@ -114,8 +83,8 @@ const ShowInfo = (props) => {
             <p>{overview}</p>
           </div>
 
-          <div className="movie__right">
-            <ul className="movie__genre">
+          <div className="showInfo__right">
+            <ul className="showInfo__details--list list__inline">
               <h3>Genres:</h3>
               {genres.map((genre) => {
                 return <li key={genre.id}>{genre.name}</li>;
@@ -125,35 +94,51 @@ const ShowInfo = (props) => {
         </div>
 
         {/* third section - trailers and other videos*/}
-        <div className="movie__videos">
-          <h3>Trailers & More</h3>
-          <div className="movie__trailers">
+        <div className="showInfo__videos">
+          <h3 className="showInfo__subHeading">Trailers & More</h3>
+          <div className="showInfo__trailers">
             <Video videos={videos.results} />
           </div>
         </div>
 
         {/* fourth section - more like this - show recommendation */}
         <div
-          className="movie__videos"
+          className="showInfo__videos"
           style={{ display: displayRecsHandler() }}
         >
-          <h3>More Like This</h3>
-          <div className="movie_recs">
+          <h3 className="showInfo__subHeading">More Like This</h3>
+          <div className="showInfo__recs">
             <ShowThumbnail
-              showList={props.recs}
-              getMovieDetails={props.getMovieDetails}
-              getRecs={props.getRecs}
+              showList={recs}
+              getMovieDetails={getMovieDetails}
+              getRecs={getRecs}
             />
           </div>
         </div>
 
-        {/* fifth section - more details
-        <div className="movie__details">
-          <h3>Cast:</h3>
-          {props.shows.credits.casts.map((cast) => {
-            <li>{cast.name}</li>;
-          })}
-        </div> */}
+        {/* fifth section - more details*/}
+        <div className="showInfo__details bottom">
+          <h3 className="showInfo__subHeading">About {showTitle} </h3>
+
+          {/* casts */}
+          <DetailList list={credits.cast} heading={"Cast:"} />
+
+          {/* crews */}
+          {/* <DetailList list={credits.crew} heading={"Crew:"} /> */}
+
+          {/* Production */}
+          <DetailList
+            list={production_companies}
+            heading={"Production Company:"}
+          />
+
+          {/* Network */}
+          {networks && <DetailList list={networks} heading={"Network:"} />}
+
+          {created_by && (
+            <DetailList list={created_by} heading={"Created By:"} />
+          )}
+        </div>
       </div>
     </>
   );

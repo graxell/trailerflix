@@ -3,27 +3,34 @@ import React from "react";
 import Banner from "../components/Banner";
 
 const Categories = (props) => {
-  const { getMovieDetails, bannerShow, genres, getShowsByGenre } = props;
+  const { getMovieDetails, bannerShow, genres, getShowsByGenre, screen } =
+    props;
 
+  const { genreList, mediaType } = genres;
   return (
     <>
       <div className={"main__categories--container"}>
         {bannerShow && (
-          <Banner bannerShow={bannerShow} getMovieDetails={getMovieDetails} />
+          <Banner
+            screen={screen}
+            bannerShow={bannerShow}
+            getMovieDetails={getMovieDetails}
+          />
         )}
 
         <ul className="genre__list">
-          {genres.genreList &&
-            genres.genreList.map((genre) => {
+          {genreList &&
+            genreList.map((genre) => {
+              const { id, name } = genre;
               return (
                 <li
                   className="genre--box"
-                  key={genre.id}
+                  key={id}
                   onClick={() => {
-                    getShowsByGenre(genres.mediaType, genre.id, genre.name);
+                    getShowsByGenre(mediaType, id, name);
                   }}
                 >
-                  {genre.name}
+                  {name}
                 </li>
               );
             })}

@@ -8,6 +8,12 @@ const Details = (props) => {
       <div className="thumbnail__bottom">
         <p>{props.releaseDate}</p>
         <p>{props.ratings}</p>
+        <button
+          className="show__btn--add btn--circle"
+          onClick={() => console.log("Add button clicked")}
+        >
+          &#43;
+        </button>
       </div>
     </div>
   );

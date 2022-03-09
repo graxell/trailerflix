@@ -14,7 +14,10 @@ const Search = (props) => {
   };
 
   const onFocus = () => setIsFocused(true);
-  const onBlur = () => setIsFocused(false);
+  const onBlur = (e) => {
+    setIsFocused(false);
+    e.target.value = "";
+  };
 
   const searchDisplay = isFocused
     ? "header__searchBar--container focus__style"

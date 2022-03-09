@@ -1,4 +1,77 @@
+import Details from "./Details";
+import poster_Alt from "../assets/images/poster_Alt.png";
 
+const ShowThumbnail = (props) => {
+  const { showList, getMovieDetails, getRecs } = props;
+
+  //handles api call depending on media type
+  const mediaTypeHandler = (title, movieId) => {
+    if (title) {
+      getMovieDetails("tv", movieId);
+      getRecs("tv", movieId);
+    } else {
+      getMovieDetails("movie", movieId);
+      getRecs("movie", movieId);
+    }
+  };
+
+  const showListChecked = Array.isArray(showList)
+    ? showList
+    : Object.keys(showList).map((key) => showList[key]);
+
+  const thumbnail = () => {
+    return (
+      showListChecked &&
+      showListChecked.map((show) => {
+        //destructure show
+        const {
+          id,
+          title,
+          name,
+          media_type,
+          poster_path,
+          genre_id,
+          vote_average,
+          first_air_date,
+          release_date,
+        } = show;
+
+        const showTitle = title ? title : name;
+        const posterURL = `https://image.tmdb.org/t/p/original/${poster_path}`;
+        const posterImg = poster_path ? posterURL : poster_Alt;
+
+        return (
+          media_type !== "person" && (
+            <div
+              key={id}
+              className="thumbnail__container"
+              onClick={() => mediaTypeHandler(name, id)}
+            >
+              <img src={posterImg} alt={title} className="thumbnail__img" />
+
+              <Details
+                title={showTitle}
+                genre={genre_id}
+                ratings={vote_average}
+                releaseDate={
+                  first_air_date
+                    ? first_air_date.substring(0, 4)
+                    : release_date
+                    ? release_date.substring(0, 4)
+                    : "Unknown"
+                }
+              />
+            </div>
+          )
+        );
+      })
+    );
+  };
+
+  return <>{thumbnail()}</>;
+};
+
+// export default ShowThumbnail;
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -315,9 +388,7 @@ function App() {
   );
 }
 
-export default App;
-
-
+// export default App;
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -325,7 +396,7 @@ import Search from "./components/Search";
 import ShowInfo from "./pages/ShowInfo";
 import Homepage from "./pages/Homepage";
 import Categories from "./pages/Categories";
-import CategoryResult from "./pages/CategoryResult";
+import CategoryResult from "./pages/ListResult";
 import SearchResults from "./pages/SearchResults";
 import logo from "./assets/images/logo.png";
 import "./App.css";
@@ -686,4 +757,168 @@ function App() {
   );
 }
 
-export default App;
+// export default App;
+
+import React from "react";
+import ShowThumbnail from "../components/ShowThumbnail";
+import Runtime from "../components/Runtime";
+import Video from "../components/Video";
+
+const ShowInfo = (props) => {
+  const { screen, recs, show, exit, getMovieDetails, getRecs } = props;
+  //destructure props.show
+  const {
+    id,
+    first_air_date,
+    release_date,
+    title,
+    name,
+    backdrop_path,
+    vote_average,
+    runtime,
+    videos,
+    genres,
+    overview,
+    number_of_seasons,
+    tagline,
+  } = props.show;
+
+  // backdrop path
+  const backdropURL = `https://image.tmdb.org/t/p/original/${backdrop_path}`;
+
+  //show release year only
+  const releaseYear = first_air_date
+    ? first_air_date.substring(0, 4)
+    : release_date.substring(0, 4);
+
+  //handling show duration
+  const duration = () => {
+    if (runtime) {
+      return <Runtime runtime={runtime} />;
+    } else if (number_of_seasons === 1) {
+      return <div>{number_of_seasons} Season</div>;
+    } else {
+      return <div>{number_of_seasons} Seasons</div>;
+    }
+  };
+
+  //handling recommendation list
+  const displayRecsHandler = () => (recs && recs.length > 0 ? "block" : "none");
+
+  //checking if data is film or tv to display title
+  const showTitle = title ? title : name;
+
+  return (
+    <>
+      {/* top of the page - poster & titles */}
+      <div key={id} className="movie__container">
+        <div className="banner--container">
+          {backdrop_path ? (
+            <img src={backdropURL} alt={showTitle} className="banner__img" />
+          ) : (
+            <div className="backdrop__alt">No available backdrop poster!</div>
+          )}
+
+          {/* top section - buttons */}
+          <div className="banner__details--wrapper">
+            <div className="banner__details">
+              <button className="btn--circle btn__exit" onClick={exit}>
+                &#10005;
+              </button>
+              {tagline && <p>{tagline}</p>}
+              <h2 className="banner__heading">{showTitle}</h2>
+              <div className="movie__btns">
+                <button
+                  className="movie__btn--play"
+                  onClick={() => {
+                    console.log("Play Button was clicked!");
+                  }}
+                >
+                  Play
+                </button>
+                <button
+                  className="movie__btn--add btn--circle"
+                  onClick={() => {
+                    console.log("Add Button was clicked!");
+                  }}
+                >
+                  &#43;
+                </button>
+                <button
+                  className="movie__btn--like btn--circle"
+                  onClick={() => {
+                    console.log("Like Button was clicked!");
+                  }}
+                >
+                  &#128077;
+                </button>
+                <button
+                  className="movie__btn--dislike btn--circle"
+                  onClick={() => {
+                    console.log("Dislike Button was clicked!");
+                  }}
+                >
+                  &#128078;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* second section - small show info */}
+        <div className="movie__details">
+          <div className="movie__left">
+            <ul>
+              <li>{releaseYear}</li>
+              <li>{duration()}</li>
+              <li>{vote_average}</li>
+            </ul>
+            <p>{overview}</p>
+          </div>
+
+          <div className="movie__right">
+            <ul className="movie__genre">
+              <h3>Genres:</h3>
+              {genres.map((genre) => {
+                return <li key={genre.id}>{genre.name}</li>;
+              })}
+            </ul>
+          </div>
+        </div>
+
+        {/* third section - trailers and other videos*/}
+        <div className="movie__videos">
+          <h3>Trailers & More</h3>
+          <div className="movie__trailers">
+            <Video videos={videos.results} />
+          </div>
+        </div>
+
+        {/* fourth section - more like this - show recommendation */}
+        <div
+          className="movie__videos"
+          style={{ display: displayRecsHandler() }}
+        >
+          <h3>More Like This</h3>
+          <div className="movie_recs">
+            <ShowThumbnail
+              showList={recs}
+              getMovieDetails={getMovieDetails}
+              getRecs={getRecs}
+            />
+          </div>
+        </div>
+
+        {/* fifth section - more details
+        <div className="movie__details">
+          <h3>Cast:</h3>
+          {props.shows.credits.casts.map((cast) => {
+            <li>{cast.name}</li>;
+          })}
+        </div> */}
+      </div>
+    </>
+  );
+};
+
+export default ShowInfo;
