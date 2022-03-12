@@ -1,139 +1,50 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import ShowThumbnail from "../components/ShowThumbnail";
+// import axios from "axios";
+import React, { useEffect } from "react";
+import Homepage from "./Homepage";
 
 const NewAndPopular = (props) => {
-  const { getMovieDetails, getRecs, addToList, removeFromList } = props;
-  const API_KEY = "api_key=887d05f637b9e4864f8cec83c7da0a1f";
-  const ENDPOINT_URL = "https://api.themoviedb.org/3/";
-  const DEFAULT_PARAM =
-    "&language=en-US&sort_by=popularity.desc&include_video=false&page=1";
-
-  //  ---- [ STATES ] ----  //
-  const [latestMovies, setLatestMovies] = useState();
-  const [upcomingMovies, setUpcomingMovies] = useState();
-  const [airingToday, setAiringToday] = useState();
-  const [onGoingTV, setOnGoingTV] = useState();
+  const {
+    getMovieDetails,
+    extractBanner,
+    newAndPopularShows,
+    getNewAndPopular,
+    banner,
+    screen,
+    setScreen,
+    addButtonHandler,
+  } = props;
 
   useEffect(() => {
-    getLatestMovies();
-    getUpcoming();
-    getAiringToday();
-    getOnGoingTV();
+    getNewAndPopular();
+  }, [getNewAndPopular]);
+
+  useEffect(() => {
+    extractBanner(newAndPopularShows.upcoming);
   }, []);
 
-  const getLatestMovies = async () => {
-    const LATESTMOVIES_URL = ENDPOINT_URL + "movie/now_playing?" + API_KEY;
-
-    try {
-      const response = await axios.get(LATESTMOVIES_URL);
-      setLatestMovies(response.data.results);
-      console.log(response.data.results);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  const getUpcoming = async () => {
-    const UPCOMING_URL =
-      ENDPOINT_URL + "movie/upcoming?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(UPCOMING_URL);
-      setUpcomingMovies(response.data.results);
-      console.log(response.data.results);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  const getAiringToday = async () => {
-    const AIRINGTODAY_URL =
-      ENDPOINT_URL + "tv/airing_today?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(AIRINGTODAY_URL);
-      setAiringToday(response.data.results);
-      console.log(response.data.results);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  const getOnGoingTV = async () => {
-    const ONGOINGTV_URL =
-      ENDPOINT_URL + "tv/on_the_air?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(ONGOINGTV_URL);
-      setOnGoingTV(response.data.results);
-      console.log(response.data.results);
-    } catch (error) {
-      console.log("Error", error);
+  const headingHandler = (arrList) => {
+    if (arrList === "airingToday") {
+      return "Don't miss on TV today!";
+    } else if (arrList === "latest") {
+      return "Latest Films";
+    } else if (arrList === "ongoingTv") {
+      return "Programmes currently on air";
+    } else {
+      return "Coming soon in theatres";
     }
   };
 
   return (
     <>
-      <div className="main__homepage">
-        <h2>Don't miss on TV today</h2>
-        <div className="home__sliders">
-          {airingToday ? (
-            <ShowThumbnail
-              showList={airingToday}
-              getMovieDetails={getMovieDetails}
-              getRecs={getRecs}
-              addToList={addToList}
-              removeFromList={removeFromList}
-            />
-          ) : (
-            <div>Loading</div>
-          )}
-        </div>
-
-        <h2>Programmes currently on air</h2>
-        <div className="home__sliders">
-          {onGoingTV ? (
-            <ShowThumbnail
-              showList={onGoingTV}
-              getMovieDetails={getMovieDetails}
-              getRecs={getRecs}
-              addToList={addToList}
-              removeFromList={removeFromList}
-            />
-          ) : (
-            <div>Loading</div>
-          )}
-        </div>
-
-        <h2>Upcoming Films</h2>
-        <div className="home__sliders">
-          {upcomingMovies ? (
-            <ShowThumbnail
-              showList={upcomingMovies}
-              getMovieDetails={getMovieDetails}
-              getRecs={getRecs}
-              addToList={addToList}
-              removeFromList={removeFromList}
-            />
-          ) : (
-            <div>Loading</div>
-          )}
-        </div>
-
-        <h2>Latest Movies</h2>
-        <div className="home__sliders">
-          {latestMovies ? (
-            <ShowThumbnail
-              showList={latestMovies}
-              getMovieDetails={getMovieDetails}
-              getRecs={getRecs}
-            />
-          ) : (
-            <div>Loading</div>
-          )}
-        </div>
-      </div>
+      <Homepage
+        bannerShow={banner}
+        screen={screen}
+        homepageLists={newAndPopularShows}
+        setScreen={setScreen}
+        getMovieDetails={getMovieDetails}
+        headingHandler={headingHandler}
+        addButtonHandler={addButtonHandler}
+      />
     </>
   );
 };

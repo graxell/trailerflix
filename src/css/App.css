@@ -8,17 +8,17 @@
 
 @font-face {
   font-family: "NetflixSansBold";
-  src: url(./assets/fonts/NetflixSansBold.ttf) format("truetype");
+  src: url(../assets/fonts/NetflixSansBold.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "NetflixSansRegular";
-  src: url(./assets/fonts/NetflixSansRegular.ttf) format("truetype");
+  src: url(../assets/fonts/NetflixSansRegular.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "NetflixSansThin";
-  src: url(./assets/fonts/NetflixSansThin.ttf) format("truetype");
+  src: url(../assets/fonts/NetflixSansThin.ttf) format("truetype");
 }
 
 /* ///// --- [ DEFAULT ] --- ///// */
@@ -123,7 +123,7 @@ nav {
 .header__searchBar--container {
   height: 35px;
   width: 40%;
-  top: 0;
+  top: 5px;
   right: 20px;
   display: flex;
   position: absolute;
@@ -180,21 +180,21 @@ nav {
 
 /* --- --- [ SEARCH RESULTS ] --- --- */
 
-.search__results--container {
+.list__results--container {
   padding: 50px;
 }
 
-.search__results {
+.list__results {
   display: flex;
   flex-wrap: wrap;
   padding: 40px 40px 0 0;
 }
 
-.search__results > div {
-  padding: 10px;
+.list__results > div {
+  padding: 15px;
 }
 
-.search__results--heading {
+.list__results--heading {
   font-family: "NetflixSansBold";
   font-size: 2em;
   padding-left: 20px;
@@ -221,24 +221,9 @@ main {
   width: 100%;
 }
 
-/*.banner__details--wrapper {
-   height: 220px; 
-  position: absolute;
-  bottom: 150px;
-  left: 0px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}*/
-
 .banner__details {
   padding: 5px 0;
 }
-
-/* .banner__heading,
-.banner__bottom {
-  padding: 5px 0;
-} */
 
 .banner__bottom--inline {
   display: flex;
@@ -252,80 +237,50 @@ main {
 }
 
 .banner__bottom--inline.btns {
-  width: 260px;
+  width: 200px;
+}
+
+.banner__overview {
+  font-style: italic;
 }
 .banner__heading {
   font-size: 3em;
   text-shadow: 0 0 5px black;
 }
 
-.banner__infoBtn {
-  width: 100px;
-  height: 50px;
-  background-color: rgba(77, 77, 77, 0.623);
-  border-radius: 5px;
-  border: none;
-  color: white;
-  font-size: 0.8em;
-  font-family: "NetflixSansBold";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.banner__infoBtn::before {
-  content: "\1f6c8";
-  color: white;
-  font-size: 1.5em;
-  padding-right: 5px;
-}
-
-.banner__infoBtn:hover {
-  background-color: rgba(56, 56, 56, 0.623);
-  cursor: pointer;
-}
-
 /* --- --- [ slider ] --- --- */
 
-.home__sliders {
-  overflow-x: auto;
-  display: flex;
-  padding: 20px;
-}
-
-.home__sliders::-webkit-scrollbar-track {
-  background-color: var(--backgroundDark);
-}
-
-.home__sliders::-webkit-scrollbar {
-  height: 6px;
-  background-color: var(--backgroundDark);
-}
-
-.home__sliders::-webkit-scrollbar-thumb {
-  background-color: #000000;
-}
-
-.show__thumbnail {
-  cursor: pointer;
-}
-
-.main__homepage {
-  padding-top: 20px;
+.homepage--container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-/* .main__homepage--lists {
-  position: absolute;
-} */
-
-.main__homepage--lists > h2 {
+.homepage__lists > h2 {
   margin: 40px 25px 0 25px;
   font-size: 1.5em;
   font-weight: normal;
   font-family: "NetflixSansBold";
+}
+
+.homepage__sliders {
+  overflow-x: auto;
+  display: flex;
+  padding: 20px 10px;
+}
+
+.homepage__sliders::-webkit-scrollbar-track {
+  background-color: var(--backgroundDark);
+}
+
+.homepage__sliders::-webkit-scrollbar {
+  height: 6px;
+  background-color: var(--backgroundDark);
+}
+
+.homepage__sliders::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 10px;
 }
 
 /* --- --- [ MOVIE THUMBNAIL ] --- --- */
@@ -338,12 +293,12 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: transform 0.2s;
+  transition: all 0.2s ease-in-out;
 }
 
 .thumbnail__container:hover {
   background-color: var(--greyTransparent);
-  box-shadow: 0px 6px 11px 7px rgba(0, 0, 0, 0.986);
+  box-shadow: 0px 8px 5px 2px rgba(0, 0, 0, 0.986);
   transform: scale(1.1);
 }
 
@@ -353,27 +308,32 @@ main {
   background-color: var(--greyTransparent);
 }
 
+.show__thumbnail {
+  cursor: pointer;
+}
+
 .thumbnail__img {
   width: 130px;
 }
 .thumbnail__title,
 .thumbnail__bottom > p {
-  font-size: 1em;
+  font-size: 0.8em;
 }
 
 .thumbnail__bottom {
   display: flex;
+  justify-content: space-between;
 }
 
 .thumbnail__bottom > p {
-  margin: 5px 15px 5px 5px;
+  margin: 5px 15px 5px 0px;
   font-size: 0.8em;
 }
 
 .thumbnail__details--wrapper {
   background-color: var(--backgroundDarker);
   height: 100px;
-  width: 130px;
+  width: 140px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -411,6 +371,13 @@ main {
   border: solid rgba(255, 255, 255, 0.781) 2px;
   border-radius: 10px;
   background-color: rgba(66, 64, 64, 0.205);
+  transition: all 0.2s ease-in-out;
+}
+
+.genre--box:hover {
+  background-color: rgba(104, 103, 103, 0.884);
+  transform: scale(1.1);
+  font-weight: bolder;
 }
 
 /* --- --- [ MOVIE PAGE ] --- --- */
@@ -478,7 +445,6 @@ main {
 
 .showInfo__details.bottom {
   border-top: solid rgb(139, 139, 139) 2px;
-  padding: 20px 20px 20px 0px;
   display: flex;
   flex-direction: column;
 }
@@ -496,7 +462,7 @@ main {
 
 .showInfo__right,
 .showInfo__left {
-  margin-top: 10%;
+  margin-top: 20px;
   background: none;
 }
 
@@ -511,6 +477,11 @@ main {
 .showInfo__left > *,
 .showInfo__right > * {
   padding: 20px 20px 0 40px;
+}
+
+.showInfo__more {
+  font-style: italic;
+  color: white;
 }
 
 /* --- [ movie left - list ] ---  */
@@ -564,13 +535,13 @@ main {
   width: 260px;
 }
 
-.show__btn--play::before {
+.btn__watch::before {
   content: "\25B6";
   padding-right: 15px;
   font-size: 1.7em;
 }
 
-.show__btn--play {
+.btn__watch {
   background-color: white;
   color: black;
   font-weight: bolder;
@@ -580,6 +551,32 @@ main {
   border-radius: 3px;
   display: flex;
   align-items: center;
+}
+
+.btn__moreInfo {
+  width: 100px;
+  height: 50px;
+  background-color: rgba(77, 77, 77, 0.623);
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 0.8em;
+  font-family: "NetflixSansBold";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn__moreInfo::before {
+  content: "\1f6c8";
+  color: white;
+  font-size: 1.5em;
+  padding-right: 5px;
+}
+
+.btn__moreInfo:hover {
+  background-color: rgba(56, 56, 56, 0.623);
+  cursor: pointer;
 }
 
 /* --- [ VIDEOS ] ---  */
@@ -596,6 +593,7 @@ main {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  padding-bottom: 10px;
 }
 
 .trailer--content {

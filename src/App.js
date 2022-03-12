@@ -4,54 +4,39 @@ import Search from "./components/Search";
 import ShowInfo from "./pages/ShowInfo";
 import Homepage from "./pages/Homepage";
 import NavBar from "./components/NavBar";
-import Categories from "./pages/Categories";
+import Genres from "./pages/Genres";
 import ListResult from "./pages/ListResult";
-// import SearchResults from "./pages/SearchResults";
-import logo from "./assets/images/logo.png";
-import "./App.css";
-import "./MediaQuery.css";
 import NewAndPopular from "./pages/NewAndPopular";
 import MyWatchList from "./pages/MyWatchList";
+import logo from "./assets/images/logo.png";
+import "./css/App.css";
+import "./css/MediaQuery.css";
+
+console.log(process.env.REACT_APP_API_KEY);
 
 //   ---- [ FUNCTION START ] ----   //
 
 function App() {
-  const API_KEY = "api_key=887d05f637b9e4864f8cec83c7da0a1f";
+  //   ---- [ parts of url ] ----   //
+  const API_KEY = process.env.REACT_APP_API_KEY;
   const ENDPOINT_URL = "https://api.themoviedb.org/3/";
   const DEFAULT_PARAM =
     "&language=en-US&sort_by=popularity.desc&include_video=false&page=1";
 
   //   ---- [ STATES ] ----   //
-  const [searchInput, setSearchInput] = useState();
-  const [showList, setShowList] = useState();
-  const [show, setShow] = useState();
+  const [homepageLists, setHomepageLists] = useState({}); //homepage state
+  const [show, setShow] = useState([]);
   const [banner, setBanner] = useState();
-  const [recs, setRecs] = useState();
+  const [searchInput, setSearchInput] = useState();
   const [genres, setGenres] = useState({ genreList: {}, mediaType: "" });
-  const [listDetails, setListDetails] = useState();
+  const [showList, setShowList] = useState(); //list based on genre/search result
   const [screen, setScreen] = useState(0);
+  const [newAndPopularShows, setNewAndPopularShows] = useState({});
   const [myList, setMyList] = useState([]);
-  const [addBtn, setAddBtn] = useState(false);
 
-  //  ---- [ HOMEPAGE STATES ] ----  //
-
-  const [homepageLists, setHomepageLists] = useState({});
-
-  useEffect(async () => {
-    const trending = await trendingShows();
-    const popularMovies = await getPopularSeries();
-    const popularSeries = await getPopularMovies();
-    const topRatedMovies = await topMovies();
-    const topRatedSeries = await topSeries();
-    setHomepageLists({
-      ...homepageLists,
-      trending: trending,
-      popularMovies: popularMovies,
-      popularSeries: popularSeries,
-      topRatedMovies: topRatedMovies,
-      topRatedSeries: topRatedSeries,
-    });
-    console.log(homepageLists);
+  //   ---- [ useEffect CALLS ] ----   //
+  useEffect(() => {
+    homepageApiCall();
     getItem();
   }, []);
 
@@ -59,85 +44,45 @@ function App() {
     extractBanner(homepageLists.trending);
   }, [homepageLists.trending]);
 
-  const getItem = () => {
-    const savedList = JSON.parse(localStorage.getItem("personalShowList"));
-
-    setMyList(savedList);
-    console.log(savedList);
-  };
-
-  const addBtnToggle = () => {
-    setAddBtn(!addBtn);
-  };
-
-  //// ----  [  HOMEPAGE - API CALLS  ]  ---- ////
-
-  // --- [  Trending shows ] --- //
-  const trendingShows = async () => {
-    const TRENDING_URL =
-      ENDPOINT_URL + "trending/all/day?" + API_KEY + DEFAULT_PARAM;
-
+  //// ----  [  HOMEPAGE - API CALL  ]  ---- ////
+  const homepageApiCall = async () => {
+    const url = (urlParam) => {
+      return ENDPOINT_URL + urlParam + API_KEY + DEFAULT_PARAM;
+    };
     try {
-      const response = await axios.get(TRENDING_URL);
-      return response.data.results;
+      const trending = await axios.get(url("trending/all/day?"));
+      const popularMovies = await axios.get(url("movie/popular?"));
+      const popularSeries = await axios.get(url("tv/popular?"));
+      const topRatedMovies = await axios.get(url("movie/top_rated?"));
+      const topRatedSeries = await axios.get(url("tv/top_rated?"));
+      setHomepageLists({
+        trending: trending.data.results,
+        popularMovies: popularMovies.data.results,
+        popularSeries: popularSeries.data.results,
+        topRatedMovies: topRatedMovies.data.results,
+        topRatedSeries: topRatedSeries.data.results,
+      });
     } catch (error) {
       console.log("Error", error);
     }
   };
 
-  // --- [ Popular - MUST WATCH FILMS ] --- //
-  const getPopularMovies = async () => {
-    const POPULAR_MOVIES_URL =
-      ENDPOINT_URL + "movie/popular?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(POPULAR_MOVIES_URL);
-      return response.data.results;
-    } catch (error) {
-      console.log("Error", error);
+  // --- [ heading handler depending on array key ] --- //
+  const homepageHeadingHandler = (arrList) => {
+    if (arrList === "trending") {
+      return "Trending Now";
+    } else if (arrList === "popularMovies") {
+      return "Must-watch Films";
+    } else if (arrList === "popularSeries") {
+      return "Popular Series";
+    } else if (arrList === "topRatedMovies") {
+      return "Discover Great Films";
+    } else {
+      return "Binge-worthy TV Shows";
     }
   };
 
-  // --- [ Popular SERIES ] --- //
-  const getPopularSeries = async () => {
-    const POPULAR_SERIES_URL =
-      ENDPOINT_URL + "tv/popular?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(POPULAR_SERIES_URL);
-      return response.data.results;
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  // --- [ Top Rated Movies - DISCOVER FILMS ] --- //
-  const topMovies = async () => {
-    const TOP_MOVIES_URL =
-      ENDPOINT_URL + "movie/top_rated?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(TOP_MOVIES_URL);
-      return response.data.results;
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  // --- [ Top Rated SERIES ] --- //
-  const topSeries = async () => {
-    const TOP_SERIES_URL =
-      ENDPOINT_URL + "tv/top_rated?" + API_KEY + DEFAULT_PARAM;
-
-    try {
-      const response = await axios.get(TOP_SERIES_URL);
-      return response.data.results;
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  // --- [ extractBanner ] --- //
+  // --- [ extractBanner - to get random film from a list to show in banner ] --- //
   const extractBanner = async (showList) => {
     if (showList) {
       const bannerShow = showList[Math.floor(Math.random() * showList.length)];
@@ -145,47 +90,36 @@ function App() {
       console.log(bannerShow);
     }
   };
+
   //// ----  [  FUNCTIONS TO GET MORE INFO ABOUT SHOW  ]  ---- ////
 
   //   --- [ SHOWINFO - movie/tv information page] ---   //
   const getMovieDetails = async (mediaType, movieId) => {
-    const movieURL =
-      ENDPOINT_URL +
-      `${mediaType}/${movieId}?` +
-      API_KEY +
-      "&append_to_response=videos,credits,watch/providers,images,releases,release_dates";
-
     try {
-      const response = await axios.get(movieURL);
-      setShow(response.data);
+      const show = await axios.get(
+        `${ENDPOINT_URL}${mediaType}/${movieId}?${API_KEY}&append_to_response=videos,credits,watch/providers,images,releases,release_dates`
+      );
+      const recs = await axios.get(
+        `${ENDPOINT_URL}${mediaType}/${movieId}/recommendations?${API_KEY}${DEFAULT_PARAM}`
+      );
+
+      setShow({
+        aboutShow: show.data,
+        showRecs: recs.data.results,
+      });
       setScreen(2);
-      console.log(response.data);
+      console.log(recs.data.results);
+      console.log(show.data);
     } catch (error) {
       console.log("Error", error);
     }
   };
 
   //   ---- [ MORE LIKE THIS - movie recommendation based on chose film ] ----   //
-  const getMovieRecs = async (mediaType, movieId) => {
-    const movieRecURL =
-      ENDPOINT_URL +
-      `${mediaType}/${movieId}/recommendations?` +
-      API_KEY +
-      "&append_to_response=videos,credits,watch/providers";
-
-    try {
-      const response = await axios.get(movieRecURL);
-      setRecs(response.data.results);
-      console.log(response.data.results);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
 
   //   ---- [ Get List of Genres ] ----   //
   const getGenres = async (mediaType) => {
-    const GENRE_URL =
-      ENDPOINT_URL + `genre/${mediaType}/list?` + API_KEY + DEFAULT_PARAM;
+    const GENRE_URL = `${ENDPOINT_URL}genre/${mediaType}/list?${API_KEY}${DEFAULT_PARAM}`;
 
     try {
       const response = await axios.get(GENRE_URL);
@@ -199,17 +133,15 @@ function App() {
 
   //   ---- [ Get shows of the chosen genre ] ----   //
   const getShowsByGenre = async (mediaType, id, genre) => {
-    const GENRE_URL =
-      ENDPOINT_URL +
-      `discover/${mediaType}?` +
-      API_KEY +
-      `&with_genres=${id}` +
-      DEFAULT_PARAM;
+    const GENRE_URL = `${ENDPOINT_URL}discover/${mediaType}?${API_KEY}&with_genres=${id}${DEFAULT_PARAM}`;
 
     try {
       const response = await axios.get(GENRE_URL);
-      setShowList(response.data.results);
-      setListDetails({ genreName: genre, mediaType: mediaType });
+      setShowList({
+        shows: response.data.results,
+        genreName: genre,
+        mediaType: mediaType,
+      });
       setScreen(1);
       setSearchInput();
       console.log(response.data.results);
@@ -218,19 +150,36 @@ function App() {
     }
   };
 
+  //   ---- [ Get New and Popular shows ] ----   //
+  const getNewAndPopular = async () => {
+    const url = (specificParam) => {
+      return ENDPOINT_URL + specificParam + API_KEY;
+    };
+
+    try {
+      const airingToday = await axios.get(url("tv/airing_today?"));
+      const latest = await axios.get(url("movie/now_playing?"));
+      const ongoingTv = await axios.get(url("tv/on_the_air?"));
+      const upcoming = await axios.get(url("movie/upcoming?"));
+      setNewAndPopularShows({
+        airingToday: airingToday.data.results,
+        latest: latest.data.results,
+        ongoingTv: ongoingTv.data.results,
+        upcoming: upcoming.data.results,
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   //// ----  [ SEARCH ENGINE FUNCTIONS]  ---- ////
 
   const search = async () => {
-    const searchURL =
-      ENDPOINT_URL +
-      "search/multi?" +
-      API_KEY +
-      `&query=${searchInput}` +
-      DEFAULT_PARAM;
+    const searchURL = `${ENDPOINT_URL}search/multi?${API_KEY}&query=${searchInput}${DEFAULT_PARAM}`;
 
     try {
       const response = await axios.get(searchURL);
-      setShowList(response.data.results);
+      setShowList({ ...showList, shows: response.data.results });
       setScreen(1);
       console.log(response.data.results);
     } catch (error) {
@@ -240,6 +189,65 @@ function App() {
 
   const handleInput = (e) => {
     setSearchInput(e.target.value);
+  };
+
+  //   ---- [ LOCAL STORAGE ] ----   //
+
+  const saveToLocalStorage = (list) => {
+    localStorage.setItem("personalShowList", JSON.stringify(list));
+  };
+
+  const getItem = () => {
+    const savedList = JSON.parse(localStorage.getItem("personalShowList"));
+
+    setMyList(savedList);
+    console.log(savedList);
+  };
+
+  //add show to list
+  const addToList = (show) => {
+    const newPersonalList = [...myList, show];
+    setMyList(newPersonalList);
+    saveToLocalStorage(newPersonalList);
+    console.log(myList);
+  };
+
+  //remove show from list
+  const removeFromList = (show) => {
+    const newPersonalList = myList.filter(
+      (listItem) => listItem.id !== show.id
+    );
+
+    setMyList(newPersonalList);
+    saveToLocalStorage(newPersonalList);
+  };
+
+  //handling add/remove button
+  const addButtonHandler = (show, id) => {
+    const listed = myList.some((item) => item.id === id);
+    if (!listed) {
+      return (
+        <button
+          className="show__btn--add btn--circle"
+          onClick={() => {
+            addToList(show);
+          }}
+        >
+          &#43;
+        </button>
+      );
+    } else {
+      return (
+        <button
+          className="show__btn--remove btn--circle"
+          onClick={() => {
+            removeFromList(show);
+          }}
+        >
+          &#x2713;
+        </button>
+      );
+    }
   };
 
   //// ----  [ SETTING SCREEN FUNCTIONS]  ---- ////
@@ -295,52 +303,55 @@ function App() {
         {screen === 0 && (
           <Homepage
             bannerShow={banner}
+            addButtonHandler={addButtonHandler}
             screen={screen}
             homepageLists={homepageLists}
             setScreen={setScreen}
             getMovieDetails={getMovieDetails}
-            getRecs={getMovieRecs}
+            headingHandler={homepageHeadingHandler}
           />
         )}
 
         {screen === 1 && showList && (
           <ListResult
             showList={showList}
-            listDetails={listDetails}
             searchInput={searchInput}
             getMovieDetails={getMovieDetails}
-            getRecs={getMovieRecs}
+            addButtonHandler={addButtonHandler}
           />
         )}
 
         {screen === 2 && show && (
           <ShowInfo
-            recs={recs}
             show={show}
             screen={screen}
             exit={handleExitBtn}
             getMovieDetails={getMovieDetails}
-            getRecs={getMovieRecs}
-            setMyList={setMyList}
-            myList={myList}
+            addButtonHandler={addButtonHandler}
           />
         )}
 
         {screen === 3 && (
-          <Categories
+          <Genres
             bannerShow={banner}
             screen={screen}
             genres={genres}
             getShowsByGenre={getShowsByGenre}
             getMovieDetails={getMovieDetails}
-            getRecs={getMovieRecs}
+            addButtonHandler={addButtonHandler}
           />
         )}
 
         {screen === 4 && (
           <NewAndPopular
             getMovieDetails={getMovieDetails}
-            getRecs={getMovieRecs}
+            extractBanner={extractBanner}
+            newAndPopularShows={newAndPopularShows}
+            getNewAndPopular={getNewAndPopular}
+            banner={banner}
+            screen={screen}
+            setScreen={setScreen}
+            addButtonHandler={addButtonHandler}
           />
         )}
 
@@ -348,7 +359,7 @@ function App() {
           <MyWatchList
             myList={myList}
             getMovieDetails={getMovieDetails}
-            getRecs={getMovieRecs}
+            addButtonHandler={addButtonHandler}
           />
         )}
       </main>

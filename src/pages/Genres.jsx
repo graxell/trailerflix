@@ -7,9 +7,10 @@ const Categories = (props) => {
     props;
 
   const { genreList, mediaType } = genres;
+
   return (
     <>
-      <div className={"main__categories--container"}>
+      <div className={"genre--container"}>
         {bannerShow && (
           <Banner
             screen={screen}

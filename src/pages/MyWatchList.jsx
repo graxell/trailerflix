@@ -2,23 +2,29 @@ import React from "react";
 import ShowThumbnail from "../components/ShowThumbnail";
 
 const MyWatchList = (props) => {
-  const { myList, getMovieDetails, addToList, removeFromList, getRecs } = props;
+  const { myList, getMovieDetails, addButtonHandler } = props;
 
   return (
     <>
-      <div className="search__results--container">
-        <h2 className="search__results--heading">My List</h2>
-        <div className="search__results">
-          {myList.length > 0 ? (
-            <ShowThumbnail
-              showList={myList}
-              getMovieDetails={getMovieDetails}
-              addToList={addToList}
-              removeFromList={removeFromList}
-              getRecs={getRecs}
-            />
+      <div className="list__results--container">
+        <h2 className="list__results--heading">My List</h2>
+
+        <div className="list__results">
+          {myList && myList.length > 0 ? (
+            myList.map((show) => {
+              return (
+                <ShowThumbnail
+                  key={show.id}
+                  showList={show}
+                  getMovieDetails={getMovieDetails}
+                  addButtonHandler={addButtonHandler}
+                />
+              );
+            })
           ) : (
-            <div>Sorry, no results found!</div>
+            <div>
+              Explore Trailerflix to find shows you want to add to your list!
+            </div>
           )}
         </div>
       </div>

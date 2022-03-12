@@ -1,14 +1,10 @@
 import React from "react";
 
 const Navbar = (props) => {
-  const {
-    getHomepage,
-    extractBanner,
-    getGenres,
-    setScreen,
-    homepageLists,
-    getItem,
-  } = props;
+  const { getHomepage, extractBanner, getGenres, setScreen, homepageLists } =
+    props;
+
+  const { trending, popularSeries, popularMovies } = homepageLists;
 
   return (
     <>
@@ -18,7 +14,7 @@ const Navbar = (props) => {
           <li
             onClick={() => {
               getHomepage();
-              extractBanner(homepageLists.trending);
+              extractBanner(trending);
             }}
           >
             Home
@@ -26,7 +22,7 @@ const Navbar = (props) => {
           <li
             onClick={() => {
               getGenres("tv");
-              extractBanner(homepageLists.popularSeries);
+              extractBanner(popularSeries);
             }}
           >
             Series
@@ -34,7 +30,7 @@ const Navbar = (props) => {
           <li
             onClick={() => {
               getGenres("movie");
-              extractBanner(homepageLists.popularMovies);
+              extractBanner(popularMovies);
             }}
           >
             Films
