@@ -12,8 +12,6 @@ import logo from "./assets/images/logo.png";
 import "./css/App.css";
 import "./css/MediaQuery.css";
 
-console.log(process.env.REACT_APP_API_KEY);
-
 //   ---- [ FUNCTION START ] ----   //
 
 function App() {
@@ -224,7 +222,7 @@ function App() {
 
   //handling add/remove button
   const addButtonHandler = (show, id) => {
-    const listed = myList.some((item) => item.id === id);
+    const listed = myList ? myList.some((item) => item.id === id) : null;
     if (!listed) {
       return (
         <button
