@@ -23,7 +23,7 @@ function App() {
 
   //   ---- [ STATES ] ----   //
   const [homepageLists, setHomepageLists] = useState({}); //homepage state
-  const [show, setShow] = useState([]);
+  const [show, setShow] = useState({});
   const [banner, setBanner] = useState();
   const [searchInput, setSearchInput] = useState();
   const [genres, setGenres] = useState({ genreList: {}, mediaType: "" });
@@ -105,7 +105,6 @@ function App() {
         aboutShow: show.data,
         showRecs: recs.data.results,
       });
-      setScreen(2);
       console.log(recs.data.results);
       console.log(show.data);
     } catch (error) {
@@ -122,7 +121,8 @@ function App() {
     try {
       const response = await axios.get(GENRE_URL);
       setGenres({ genreList: response.data.genres, mediaType: mediaType });
-      setScreen(3);
+      setScreen(2);
+      setShow({});
       console.log(response.data.genres);
     } catch (error) {
       console.log("Error", error);
@@ -250,19 +250,18 @@ function App() {
 
   // ----  [ SETTING SCREEN FUNCTIONS]  ---- ////
   const handleExitBtn = () => {
-    if (showList) {
-      setScreen(1);
-    } else {
-      setScreen(0);
-    }
+    setScreen(screen);
+    setShow({});
   };
 
-  const getHomepage = () => {
+  const getScreenPage = (screen) => {
     if (showList) {
-      setScreen(0);
+      setScreen(screen);
       setShowList();
+      setShow({});
     } else {
-      setScreen(0);
+      setScreen(screen);
+      setShow({});
     }
   };
 
@@ -272,7 +271,7 @@ function App() {
         <h1 className="header__logo">
           <img
             onClick={() => {
-              getHomepage();
+              getScreenPage(0);
               extractBanner(homepageLists.trending);
             }}
             src={logo}
@@ -281,13 +280,11 @@ function App() {
         </h1>
 
         <NavBar
-          getHomepage={getHomepage}
+          getScreenPage={getScreenPage}
           extractBanner={extractBanner}
           getGenres={getGenres}
-          setScreen={setScreen}
           homepageLists={homepageLists}
           getItem={getItem}
-          setShowList={setShowList}
         />
 
         <Search
@@ -302,6 +299,7 @@ function App() {
         {screen === 0 && (
           <Homepage
             bannerShow={banner}
+            show={show}
             addButtonHandler={addButtonHandler}
             screen={screen}
             homepageLists={homepageLists}
@@ -317,22 +315,16 @@ function App() {
             searchInput={searchInput}
             getMovieDetails={getMovieDetails}
             addButtonHandler={addButtonHandler}
+            extractBanner={extractBanner}
+            getGenres={getGenres}
+            homepageLists={homepageLists}
           />
         )}
 
-        {screen === 2 && show && (
-          <ShowInfo
-            show={show}
-            screen={screen}
-            exit={handleExitBtn}
-            getMovieDetails={getMovieDetails}
-            addButtonHandler={addButtonHandler}
-          />
-        )}
-
-        {screen === 3 && (
+        {screen === 2 && (
           <Genres
             bannerShow={banner}
+            show={show}
             screen={screen}
             genres={genres}
             getShowsByGenre={getShowsByGenre}
@@ -341,22 +333,33 @@ function App() {
           />
         )}
 
-        {screen === 4 && (
+        {screen === 3 && (
           <NewAndPopular
             getMovieDetails={getMovieDetails}
             extractBanner={extractBanner}
             newAndPopularShows={newAndPopularShows}
             getNewAndPopular={getNewAndPopular}
             banner={banner}
+            show={show}
             screen={screen}
             setScreen={setScreen}
             addButtonHandler={addButtonHandler}
           />
         )}
 
-        {screen === 5 && (
+        {screen === 4 && (
           <MyWatchList
             myList={myList}
+            getMovieDetails={getMovieDetails}
+            addButtonHandler={addButtonHandler}
+          />
+        )}
+
+        {show.aboutShow && (
+          <ShowInfo
+            show={show}
+            screen={screen}
+            exit={handleExitBtn}
             getMovieDetails={getMovieDetails}
             addButtonHandler={addButtonHandler}
           />

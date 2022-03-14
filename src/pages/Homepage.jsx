@@ -10,6 +10,7 @@ const Homepage = (props) => {
     getMovieDetails,
     screen,
     headingHandler,
+    show,
   } = props;
 
   let homepageListsKeys = Object.keys(homepageLists);
@@ -20,6 +21,7 @@ const Homepage = (props) => {
         {bannerShow && (
           <Banner
             screen={screen}
+            show={show}
             bannerShow={bannerShow}
             getMovieDetails={getMovieDetails}
             addButtonHandler={addButtonHandler}

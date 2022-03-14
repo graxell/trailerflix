@@ -47,7 +47,12 @@ const ShowThumbnail = (props) => {
           />
 
           <div className="thumbnail__details--wrapper">
-            <h2 className="thumbnail__title">{showTitle}</h2>
+            <h2
+              className="thumbnail__title"
+              onClick={() => mediaTypeHandler(name, id)}
+            >
+              {showTitle}
+            </h2>
 
             <div className="thumbnail__bottom">
               <p>{releaseYear}</p>

@@ -12,6 +12,7 @@ const NewAndPopular = (props) => {
     screen,
     setScreen,
     addButtonHandler,
+    show,
   } = props;
 
   useEffect(() => {
@@ -38,6 +39,7 @@ const NewAndPopular = (props) => {
     <>
       <Homepage
         bannerShow={banner}
+        show={show}
         screen={screen}
         homepageLists={newAndPopularShows}
         setScreen={setScreen}

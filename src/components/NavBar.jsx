@@ -1,14 +1,7 @@
 import React from "react";
 
 const Navbar = (props) => {
-  const {
-    getHomepage,
-    extractBanner,
-    getGenres,
-    setScreen,
-    homepageLists,
-    setShowList,
-  } = props;
+  const { getScreenPage, extractBanner, getGenres, homepageLists } = props;
 
   const { trending, popularSeries, popularMovies } = homepageLists;
 
@@ -19,7 +12,7 @@ const Navbar = (props) => {
         <ul className="header__nav__menu">
           <li
             onClick={() => {
-              getHomepage();
+              getScreenPage(0);
               extractBanner(trending);
             }}
           >
@@ -29,7 +22,6 @@ const Navbar = (props) => {
             onClick={() => {
               getGenres("tv");
               extractBanner(popularSeries);
-              setShowList();
             }}
           >
             Series
@@ -38,23 +30,20 @@ const Navbar = (props) => {
             onClick={() => {
               getGenres("movie");
               extractBanner(popularMovies);
-              setShowList();
             }}
           >
             Films
           </li>
           <li
             onClick={() => {
-              setScreen(4);
-              setShowList();
+              getScreenPage(3);
             }}
           >
             New & Popular
           </li>
           <li
             onClick={() => {
-              setScreen(5);
-              setShowList();
+              getScreenPage(4);
             }}
           >
             My List

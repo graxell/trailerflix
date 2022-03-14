@@ -200,6 +200,10 @@ nav {
   padding-left: 20px;
 }
 
+.list__results--heading .pre--heading {
+  cursor: pointer;
+}
+
 /* --- --- [ HOMEPAGE ] --- --- */
 main {
   margin-top: 4%;
@@ -498,12 +502,6 @@ main {
 .right--wrapper {
   display: flex;
 }
-
-/* .movie__details--list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-} */
 
 /* --- [ BUTTONS ] ---  */
 

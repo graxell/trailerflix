@@ -80,6 +80,7 @@ const ShowInfo = (props) => {
           <Banner
             screen={screen}
             bannerShow={show.aboutShow}
+            show={show}
             exit={exit}
             addButtonHandler={addButtonHandler}
           />
@@ -89,7 +90,7 @@ const ShowInfo = (props) => {
             <div className="showInfo__left">
               <ul>
                 <li>
-                  {release !== "Unknown" ? release.substring(0, 4) : "Unknown"}
+                  {release === "Unknown" ? "Unknown" : release.substring(0, 4)}
                 </li>
                 <li>{duration()}</li>
                 <li>{vote_average}</li>

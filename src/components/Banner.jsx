@@ -2,7 +2,7 @@ import React from "react";
 import banner_Alt from "../assets/images/banner_Alt.png";
 
 const Banner = (props) => {
-  const { bannerShow, getMovieDetails, screen, exit, addButtonHandler } = props;
+  const { show, bannerShow, getMovieDetails, exit, addButtonHandler } = props;
 
   const {
     backdrop_path,
@@ -23,9 +23,11 @@ const Banner = (props) => {
   const mediaType = title ? "movie" : "tv";
   const bannerImg = backdrop_path ? backdropURL : banner_Alt;
   const showTitle = title ? title : name;
-  const showReleaseYear = release_date
+  const showReleaseYear = first_air_date
+    ? first_air_date.substring(0, 4)
+    : release_date
     ? release_date.substring(0, 4)
-    : first_air_date.substring(0, 4);
+    : "Unknown";
 
   //Button to open official website or alt link in new window
   const handleWatchBtn = () => {
@@ -39,7 +41,7 @@ const Banner = (props) => {
         <img className="banner__img" src={bannerImg} alt={showTitle} />
 
         <div className="banner__details--wrapper">
-          {screen === 2 && (
+          {show.aboutShow && (
             <button className="btn--circle btn__exit" onClick={exit}>
               &#10005;
             </button>
@@ -50,10 +52,10 @@ const Banner = (props) => {
             <h2 className="banner__heading">{showTitle}</h2>
 
             <div className="banner__bottom">
-              {screen !== 2 && <p>{overview}</p>}
+              {!show.aboutShow && <p>{overview}</p>}
 
-              {/* Handling banner information depending on which screen it is on */}
-              {screen === 2 ? (
+              {/* Handling banner information depending if a particular show is being viewed or for banner in homepages */}
+              {show.aboutShow ? (
                 <div className="banner__bottom--inline btns">
                   <button className="btn__watch" onClick={handleWatchBtn}>
                     Watch
