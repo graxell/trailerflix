@@ -204,7 +204,7 @@ function App() {
 
   //add show to list
   const addToList = (show) => {
-    const newPersonalList = [...myList, show];
+    const newPersonalList = myList ? [...myList, show] : [show];
     setMyList(newPersonalList);
     saveToLocalStorage(newPersonalList);
     console.log(myList);
@@ -248,7 +248,7 @@ function App() {
     }
   };
 
-  //// ----  [ SETTING SCREEN FUNCTIONS]  ---- ////
+  // ----  [ SETTING SCREEN FUNCTIONS]  ---- ////
   const handleExitBtn = () => {
     if (showList) {
       setScreen(1);
@@ -287,6 +287,7 @@ function App() {
           setScreen={setScreen}
           homepageLists={homepageLists}
           getItem={getItem}
+          setShowList={setShowList}
         />
 
         <Search
