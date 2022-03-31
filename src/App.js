@@ -13,7 +13,7 @@ import "./MediaQuery.css";
 import NewAndPopular from "./pages/NewAndPopular";
 
 function App() {
-  const API_KEY = "api_key=887d05f637b9e4864f8cec83c7da0a1f";
+
   const ENDPOINT_URL = "https://api.themoviedb.org/3/";
   const DEFAULT_PARAM =
     "&language=en-US&sort_by=popularity.desc&include_video=false&page=1";
