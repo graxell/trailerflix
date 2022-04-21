@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Search from "./components/Search";
 import ShowInfo from "./pages/ShowInfo";
 import Homepage from "./pages/Homepage";
-import NavBar from "./components/NavBar";
+import HeaderNav from "./components/header/HeaderNav";
+import SignInNav from "./components/header/SignInNav";
 import Genres from "./pages/Genres";
 import ListResult from "./pages/ListResult";
 import NewAndPopular from "./pages/NewAndPopular";
 import MyWatchList from "./pages/MyWatchList";
+import SignupPage from "./account/CreateAcc/SignupPage";
+import Signin from "./account/Signin";
+import CreateAccount from "./account/CreateAcc/CreateAccount";
 import logo from "./assets/images/logo.png";
 import "./css/App.css";
+import "./css/Accounts.css";
 import "./css/MediaQuery.css";
+import MyAccount from "./account/MyAccount";
 
 //   ---- [ FUNCTION START ] ----   //
 
@@ -20,7 +26,7 @@ function App() {
   const ENDPOINT_URL = "https://api.themoviedb.org/3/";
   const DEFAULT_PARAM =
     "&language=en-US&sort_by=popularity.desc&include_video=false&page=1";
-
+  const navigate = useNavigate();
   //   ---- [ STATES ] ----   //
   const [homepageLists, setHomepageLists] = useState({}); //homepage state
   const [show, setShow] = useState({});
@@ -31,9 +37,11 @@ function App() {
   const [screen, setScreen] = useState(0);
   const [newAndPopularShows, setNewAndPopularShows] = useState({});
   const [myList, setMyList] = useState([]);
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   //   ---- [ useEffect CALLS ] ----   //
   useEffect(() => {
+    getToken();
     homepageApiCall();
     getItem();
   }, []);
@@ -202,6 +210,16 @@ function App() {
     console.log(savedList);
   };
 
+  const getToken = () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsSignedIn(true);
+    } else {
+      navigate("/signup");
+    }
+  };
+
   //add show to list
   const addToList = (show) => {
     const newPersonalList = myList ? [...myList, show] : [show];
@@ -265,6 +283,20 @@ function App() {
     }
   };
 
+  // ----  [ LOGOUT ]  ---- ////
+
+  const onSignOut = async () => {
+    const response = await axios.delete(
+      `http://localhost:6065/signout/${localStorage.getItem("email")}`,
+      { headers: { token: localStorage.getItem("token") } }
+    );
+
+    localStorage.clear();
+    setIsSignedIn(false);
+    navigate("/signin");
+
+    console.log(response);
+  };
   return (
     <>
       <header>
@@ -279,81 +311,151 @@ function App() {
           />
         </h1>
 
-        <NavBar
-          getScreenPage={getScreenPage}
-          extractBanner={extractBanner}
-          getGenres={getGenres}
-          homepageLists={homepageLists}
-          getItem={getItem}
-        />
-
-        <Search
-          search={search}
-          searchInput={searchInput}
-          handleInput={handleInput}
-          setSearchInput={setSearchInput}
-        />
-      </header>
-
-      <main>
-        {screen === 0 && (
-          <Homepage
-            bannerShow={banner}
-            show={show}
-            addButtonHandler={addButtonHandler}
-            screen={screen}
-            homepageLists={homepageLists}
-            setScreen={setScreen}
-            getMovieDetails={getMovieDetails}
-            headingHandler={homepageHeadingHandler}
-          />
-        )}
-
-        {screen === 1 && showList && (
-          <ListResult
-            showList={showList}
-            searchInput={searchInput}
-            getMovieDetails={getMovieDetails}
-            addButtonHandler={addButtonHandler}
+        {isSignedIn && (
+          <HeaderNav
+            getScreenPage={getScreenPage}
             extractBanner={extractBanner}
             getGenres={getGenres}
             homepageLists={homepageLists}
+            getItem={getItem}
+            search={search}
+            searchInput={searchInput}
+            handleInput={handleInput}
+            setSearchInput={setSearchInput}
+            onSignOut={onSignOut}
+            isSignedIn={isSignedIn}
           />
         )}
 
-        {screen === 2 && (
-          <Genres
-            bannerShow={banner}
-            show={show}
-            screen={screen}
-            genres={genres}
-            getShowsByGenre={getShowsByGenre}
-            getMovieDetails={getMovieDetails}
-            addButtonHandler={addButtonHandler}
-          />
-        )}
+        {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />}
+      </header>
 
-        {screen === 3 && (
-          <NewAndPopular
-            getMovieDetails={getMovieDetails}
-            extractBanner={extractBanner}
-            newAndPopularShows={newAndPopularShows}
-            getNewAndPopular={getNewAndPopular}
-            banner={banner}
-            show={show}
-            screen={screen}
-            setScreen={setScreen}
-            addButtonHandler={addButtonHandler}
+      <main>
+        <Routes>
+          <Route
+            path="/signup"
+            element={
+              <SignupPage
+                setScreen={setScreen}
+                getMovieDetails={getMovieDetails}
+                addButtonHandler={addButtonHandler}
+                getScreenPage={getScreenPage}
+              />
+            }
           />
-        )}
 
-        {screen === 4 && (
-          <MyWatchList
-            myList={myList}
-            getMovieDetails={getMovieDetails}
-            addButtonHandler={addButtonHandler}
+          <Route
+            exact
+            path="/create-account"
+            element={<CreateAccount getScreenPage={getScreenPage} />}
           />
-        )}
+
+          <Route
+            exact
+            path="/signin"
+            element={
+              <Signin isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} />
+            }
+          />
+
+          <Route
+            exact
+            path="/"
+            element={
+              screen === 0 && (
+                <Homepage
+                  bannerShow={banner}
+                  show={show}
+                  addButtonHandler={addButtonHandler}
+                  screen={screen}
+                  homepageLists={homepageLists}
+                  setScreen={setScreen}
+                  getMovieDetails={getMovieDetails}
+                  headingHandler={homepageHeadingHandler}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/list-result"
+            element={
+              screen === 1 && (
+                <ListResult
+                  showList={showList}
+                  searchInput={searchInput}
+                  getMovieDetails={getMovieDetails}
+                  addButtonHandler={addButtonHandler}
+                  extractBanner={extractBanner}
+                  getGenres={getGenres}
+                  homepageLists={homepageLists}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/genres"
+            element={
+              screen === 2 && (
+                <Genres
+                  bannerShow={banner}
+                  show={show}
+                  screen={screen}
+                  genres={genres}
+                  getShowsByGenre={getShowsByGenre}
+                  getMovieDetails={getMovieDetails}
+                  addButtonHandler={addButtonHandler}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/new-and-popular"
+            element={
+              screen === 3 && (
+                <NewAndPopular
+                  getMovieDetails={getMovieDetails}
+                  extractBanner={extractBanner}
+                  newAndPopularShows={newAndPopularShows}
+                  getNewAndPopular={getNewAndPopular}
+                  banner={banner}
+                  show={show}
+                  screen={screen}
+                  setScreen={setScreen}
+                  addButtonHandler={addButtonHandler}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/my-list"
+            element={
+              screen === 4 && (
+                <MyWatchList
+                  myList={myList}
+                  getMovieDetails={getMovieDetails}
+                  addButtonHandler={addButtonHandler}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/my-account"
+            element={
+              screen === 5 && (
+                <MyAccount
+                  myList={myList}
+                  getMovieDetails={getMovieDetails}
+                  addButtonHandler={addButtonHandler}
+                />
+              )
+            }
+          />
+        </Routes>
 
         {show.aboutShow && (
           <ShowInfo

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import searchIcon from "../assets/images/searchIcon.svg";
+import searchIcon from "../../assets/images/searchIcon.svg";
 
 const Search = (props) => {
   const [isFocused, setIsFocused] = useState(false);

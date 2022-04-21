@@ -1,7 +1,9 @@
 import React from "react";
 import Banner from "../components/Banner";
+import { useNavigate } from "react-router-dom";
 
 const Categories = (props) => {
+  let navigate = useNavigate();
   const {
     getMovieDetails,
     bannerShow,
@@ -37,6 +39,7 @@ const Categories = (props) => {
                   key={id}
                   onClick={() => {
                     getShowsByGenre(mediaType, id, name);
+                    navigate("/list-result");
                   }}
                 >
                   {name}

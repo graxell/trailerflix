@@ -1,7 +1,10 @@
 import React from "react";
+import AccountMenu from "./AccountMenu";
+import { Link } from "react-router-dom";
 
 const Navbar = (props) => {
-  const { getScreenPage, extractBanner, getGenres, homepageLists } = props;
+  const { getScreenPage, extractBanner, getGenres, homepageLists, onSignOut } =
+    props;
 
   const { trending, popularSeries, popularMovies } = homepageLists;
 
@@ -16,7 +19,7 @@ const Navbar = (props) => {
               extractBanner(trending);
             }}
           >
-            Home
+            <Link to="/">Home</Link>
           </li>
           <li
             onClick={() => {
@@ -24,7 +27,7 @@ const Navbar = (props) => {
               extractBanner(popularSeries);
             }}
           >
-            Series
+            <Link to="/genres">Series</Link>
           </li>
           <li
             onClick={() => {
@@ -32,22 +35,32 @@ const Navbar = (props) => {
               extractBanner(popularMovies);
             }}
           >
-            Films
+            <Link to="/genres">Films</Link>
           </li>
           <li
             onClick={() => {
               getScreenPage(3);
             }}
           >
-            New & Popular
+            <Link to="/new-and-popular">New & Popular</Link>
           </li>
           <li
             onClick={() => {
               getScreenPage(4);
             }}
           >
-            My List
+            <Link to="/my-list">My List</Link>
           </li>
+          <ul>
+            <li
+              onClick={() => {
+                getScreenPage(5);
+              }}
+            >
+              <Link to="/my-account">My Account</Link>
+            </li>
+            <li onClick={onSignOut}>Sign out of TrailerFlix</li>
+          </ul>
         </ul>
       </nav>
     </>

@@ -1,4 +1,11 @@
 import poster_Alt from "../assets/images/poster_Alt.png";
+import {
+  imageUrlPath,
+  mediaType,
+  showTitleHandler,
+  showReleaseDate,
+  showRatings,
+} from "../Utils";
 
 const ShowThumbnail = (props) => {
   const { showList, getMovieDetails, addButtonHandler } = props;
@@ -14,49 +21,32 @@ const ShowThumbnail = (props) => {
     release_date,
   } = showList;
 
-  const showTitle = title ? title : name;
-  const posterURL = `https://image.tmdb.org/t/p/original/${poster_path}`;
-  const posterImg = poster_path ? posterURL : poster_Alt;
-  const releaseYear = first_air_date
-    ? first_air_date.substring(0, 4)
-    : release_date
-    ? release_date.substring(0, 4)
-    : "Unknown";
-
-  const ratings =
-    vote_average > 3 ? Math.round(vote_average * 10) / 10 : vote_average;
-
-  //handles api call depending on media type
-  const mediaTypeHandler = (title, movieId) => {
-    if (title) {
-      getMovieDetails("tv", movieId);
-    } else {
-      getMovieDetails("movie", movieId);
-    }
-  };
+  const media = mediaType(title);
 
   return (
     <>
       {media_type !== "person" && (
         <div key={id} className="thumbnail__container">
           <img
-            onClick={() => mediaTypeHandler(name, id)}
-            src={posterImg}
-            alt={showTitle}
+            onClick={() => getMovieDetails(media, id)}
+            src={imageUrlPath(poster_path, poster_Alt)}
+            alt={showTitleHandler(title, name)}
             className="thumbnail__img"
           />
 
           <div className="thumbnail__details--wrapper">
             <h2
               className="thumbnail__title"
-              onClick={() => mediaTypeHandler(name, id)}
+              onClick={() => getMovieDetails(media, id)}
             >
-              {showTitle}
+              {showTitleHandler(title, name)}
             </h2>
 
             <div className="thumbnail__bottom">
-              <p>{releaseYear}</p>
-              <p>{ratings}</p>
+              <p>
+                {showReleaseDate(release_date, first_air_date).substring(0, 4)}
+              </p>
+              <p>{showRatings(vote_average)}</p>
               {addButtonHandler(showList, id)}
             </div>
           </div>

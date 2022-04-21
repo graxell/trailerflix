@@ -1,8 +1,17 @@
 import React from "react";
 import banner_Alt from "../assets/images/banner_Alt.png";
+import {
+  imageUrlPath,
+  mediaType,
+  showTitleHandler,
+  showReleaseDate,
+  showRatings,
+} from "../Utils";
 
 const Banner = (props) => {
   const { show, bannerShow, getMovieDetails, exit, addButtonHandler } = props;
+
+  const { aboutShow } = show;
 
   const {
     backdrop_path,
@@ -17,18 +26,6 @@ const Banner = (props) => {
     homepage,
   } = bannerShow;
 
-  const backdropURL = `https://image.tmdb.org/t/p/original${backdrop_path}`;
-
-  //checks info for tv and movie
-  const mediaType = title ? "movie" : "tv";
-  const bannerImg = backdrop_path ? backdropURL : banner_Alt;
-  const showTitle = title ? title : name;
-  const showReleaseYear = first_air_date
-    ? first_air_date.substring(0, 4)
-    : release_date
-    ? release_date.substring(0, 4)
-    : "Unknown";
-
   //Button to open official website or alt link in new window
   const handleWatchBtn = () => {
     const altUrl = `https://www.themoviedb.org/${mediaType}/${id}/watch?locale=GB`;
@@ -38,10 +35,14 @@ const Banner = (props) => {
   return (
     <>
       <div className="banner--container">
-        <img className="banner__img" src={bannerImg} alt={showTitle} />
+        <img
+          className="banner__img"
+          src={imageUrlPath(backdrop_path, banner_Alt)}
+          alt={showTitleHandler(title, name)}
+        />
 
         <div className="banner__details--wrapper">
-          {show.aboutShow && (
+          {aboutShow && (
             <button className="btn--circle btn__exit" onClick={exit}>
               &#10005;
             </button>
@@ -49,13 +50,13 @@ const Banner = (props) => {
 
           <div className="banner__details">
             {tagline && <p className="banner__overview">"{tagline}"</p>}
-            <h2 className="banner__heading">{showTitle}</h2>
+            <h2 className="banner__heading">{showTitleHandler(title, name)}</h2>
 
             <div className="banner__bottom">
-              {!show.aboutShow && <p>{overview}</p>}
+              {!aboutShow && <p>{overview}</p>}
 
               {/* Handling banner information depending if a particular show is being viewed or for banner in homepages */}
-              {show.aboutShow ? (
+              {aboutShow ? (
                 <div className="banner__bottom--inline btns">
                   <button className="btn__watch" onClick={handleWatchBtn}>
                     Watch
@@ -66,12 +67,17 @@ const Banner = (props) => {
                 </div>
               ) : (
                 <div className="banner__bottom--inline info">
-                  <p>{showReleaseYear}</p>
-                  <p>{vote_average}/10</p>
+                  <p>
+                    {showReleaseDate(release_date, first_air_date).substring(
+                      0,
+                      4
+                    )}
+                  </p>
+                  <p>{showRatings(vote_average)}/10</p>
                   <button
                     className="btn__moreInfo"
                     onClick={() => {
-                      getMovieDetails(mediaType, id);
+                      getMovieDetails(mediaType(title), id);
                     }}
                   >
                     More Info

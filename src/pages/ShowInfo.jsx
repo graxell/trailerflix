@@ -5,6 +5,7 @@ import Video from "../components/Video";
 import DetailList from "../components/DetailList";
 import Banner from "../components/Banner";
 import { useRef } from "react";
+import { showTitleHandler, showReleaseDate } from "../Utils";
 
 const ShowInfo = (props) => {
   //destructure lists
@@ -30,11 +31,7 @@ const ShowInfo = (props) => {
   } = show.aboutShow;
 
   //show release date
-  const release = first_air_date
-    ? first_air_date
-    : release_date
-    ? release_date
-    : "Unknown";
+  const release = showReleaseDate(release_date, first_air_date);
 
   //code converters
   const releaseDate = new Date(release).toLocaleDateString("en-GB", {
@@ -57,9 +54,6 @@ const ShowInfo = (props) => {
       return <div>{number_of_seasons} Seasons</div>;
     }
   };
-
-  //handling show title
-  const showTitle = title ? title : name;
 
   //handling recommendation list
   const displayRecsHandler = () =>
@@ -129,7 +123,10 @@ const ShowInfo = (props) => {
               {videos.results.length > 0 ? (
                 <Video videos={videos.results} />
               ) : (
-                `Videos for " ${showTitle} " are coming soon!`
+                `Videos for " ${showTitleHandler(
+                  title,
+                  name
+                )} " are coming soon!`
               )}
             </div>
           </div>
@@ -157,7 +154,9 @@ const ShowInfo = (props) => {
 
           {/* fifth section - more details*/}
           <div ref={aboutShow} className="showInfo__details bottom">
-            <h3 className="showInfo__subHeading">About {showTitle} </h3>
+            <h3 className="showInfo__subHeading">
+              About {showTitleHandler(title, name)}{" "}
+            </h3>
 
             {/* casts */}
             {credits.cast.length > 0 && (
