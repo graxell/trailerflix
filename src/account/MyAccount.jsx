@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react/cjs/react.production.min";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const MyAccount = () => {
@@ -13,12 +13,13 @@ const MyAccount = () => {
 
   const getUserDetails = async () => {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         `http://localhost:6065/view-account/${localStorage.getItem("email")}`,
 
         { headers: { token: localStorage.getItem("token") } }
       );
 
+      console.log(response);
       if (response.data.status) {
         setUserDetails(response.data.payload);
         console.log(response.data.payload);
@@ -29,18 +30,19 @@ const MyAccount = () => {
       console.log(error);
     }
   };
+
+  console.log(userDetails);
   return (
     <>
       <div>
-        {userDetails &&
-          Object.keys(userDetails).map((key) => {
-            return (
-              <div>
-                <h3>{key.charAt(0).toUpperCase() + key.slice(1)}</h3>
-                <p>{userDetails[key]}</p>
-              </div>
-            );
-          })}
+        {Object.keys(userDetails).map((key) => {
+          return (
+            <div>
+              <h3>{key.charAt(0).toUpperCase() + key.slice(1)}</h3>
+              <p>{userDetails[key]}</p>
+            </div>
+          );
+        })}
       </div>
     </>
   );

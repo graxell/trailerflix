@@ -297,6 +297,8 @@ function App() {
 
     console.log(response);
   };
+
+  console.log(screen);
   return (
     <>
       <header>
@@ -446,13 +448,11 @@ function App() {
           <Route
             path="/my-account"
             element={
-              screen === 5 && (
-                <MyAccount
-                  myList={myList}
-                  getMovieDetails={getMovieDetails}
-                  addButtonHandler={addButtonHandler}
-                />
-              )
+              <MyAccount
+                myList={myList}
+                getMovieDetails={getMovieDetails}
+                addButtonHandler={addButtonHandler}
+              />
             }
           />
         </Routes>
