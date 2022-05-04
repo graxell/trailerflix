@@ -3,7 +3,7 @@ import {
   pwUpperLowerCase,
   pwNumeric,
   pwSpecialCharCheck,
-} from "../AccountsUtils";
+} from "../../../utils/AccountsUtils";
 
 const PasswordReqAlert = (props) => {
   const { password } = props;

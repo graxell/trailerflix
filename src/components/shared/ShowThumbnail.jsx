@@ -1,14 +1,15 @@
-import poster_Alt from "../assets/images/poster_Alt.png";
+import poster_Alt from "../../assets/images/poster_Alt.png";
 import {
   imageUrlPath,
-  mediaType,
+  getMediaType,
   showTitleHandler,
   showReleaseDate,
   showRatings,
-} from "../Utils";
+} from "../../utils/DataUtils";
+import { getMovieDetails } from "../../controllers/apiController";
 
 const ShowThumbnail = (props) => {
-  const { showList, getMovieDetails, addButtonHandler } = props;
+  const { show, setShow, showList, addButtonHandler } = props;
 
   const {
     id,
@@ -21,24 +22,29 @@ const ShowThumbnail = (props) => {
     release_date,
   } = showList;
 
-  const media = mediaType(title);
+  const media = getMediaType(title);
+
+  const getShow = () => {
+    getMovieDetails(media, id).then((result) =>
+      setShow((prevState) => {
+        return { ...prevState, aboutShow: result };
+      })
+    );
+  };
 
   return (
     <>
       {media_type !== "person" && (
         <div key={id} className="thumbnail__container">
           <img
-            onClick={() => getMovieDetails(media, id)}
+            onClick={getShow}
             src={imageUrlPath(poster_path, poster_Alt)}
             alt={showTitleHandler(title, name)}
             className="thumbnail__img"
           />
 
           <div className="thumbnail__details--wrapper">
-            <h2
-              className="thumbnail__title"
-              onClick={() => getMovieDetails(media, id)}
-            >
+            <h2 className="thumbnail__title" onClick={getShow}>
               {showTitleHandler(title, name)}
             </h2>
 

@@ -1,8 +1,9 @@
 import React from "react";
-import ShowThumbnail from "../components/ShowThumbnail";
+import ShowThumbnail from "../shared/ShowThumbnail";
+import { getMovieDetails } from "../../controllers/apiController";
 
 const MyWatchList = (props) => {
-  const { myList, getMovieDetails, addButtonHandler } = props;
+  const { myList, addButtonHandler } = props;
 
   return (
     <>
@@ -16,7 +17,6 @@ const MyWatchList = (props) => {
                 <ShowThumbnail
                   key={show.id}
                   showList={show}
-                  getMovieDetails={getMovieDetails}
                   addButtonHandler={addButtonHandler}
                 />
               );

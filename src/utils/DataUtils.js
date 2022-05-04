@@ -1,7 +1,5 @@
-// const fs = require("fs");
-
 module.exports = {
-  mediaType: function (title) {
+  getMediaType: function (title) {
     if (title) {
       return "movie";
     } else {
@@ -39,6 +37,20 @@ module.exports = {
     }
   },
 
+  displayReleaseDate: (release) => {
+    const date = new Date(release).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    return date;
+  },
+
+  displayLanguage: new Intl.DisplayNames(["en"], {
+    type: "language",
+  }),
+
   //show ratings
   showRatings: function (rating) {
     if (rating > 3) {
@@ -46,6 +58,15 @@ module.exports = {
     } else {
       return rating;
     }
+  },
+
+  headingFormat: (heading) => {
+    const formatted = heading
+      .replace(/_/g, " ")
+      .replace(/(^\w|\s\w)/g, (firstCharOfWord) =>
+        firstCharOfWord.toUpperCase()
+      );
+    return formatted;
   },
 };
 

@@ -11,6 +11,7 @@ const MyAccount = () => {
     getUserDetails();
   }, []);
 
+  //  -- IN API CONTROLLER
   const getUserDetails = async () => {
     try {
       const response = await axios.get(

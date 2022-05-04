@@ -36,7 +36,6 @@
 
 button {
   cursor: pointer;
-  z-index: 100;
 }
 
 .shake {

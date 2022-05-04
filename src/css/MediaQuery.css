@@ -94,6 +94,11 @@
     width: 170px;
     padding: 0 15px 15px 15px;
   }
+
+  .showInfo__left > *,
+  .showInfo__right > * {
+    padding: 20px 20px 0 40px;
+  }
 }
 
 @media screen and (min-width: 885px) {
@@ -116,8 +121,8 @@
     background: none;
   }
 
-  .showInfo__container > div {
-    padding: 0 200px;
+  .showInfo__background {
+    margin: 0 200px;
   }
 }
 

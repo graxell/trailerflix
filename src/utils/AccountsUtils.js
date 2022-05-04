@@ -1,5 +1,3 @@
-// const Joi = require("joi");
-
 const emailFormat = new RegExp(
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 );
@@ -7,12 +5,6 @@ const emailFormat = new RegExp(
 const passwordReq = new RegExp(
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 );
-
-// const pwUpperLowerCase = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])/);
-
-// const pwNumeric = new RegExp(/(?=.*\d)/);
-
-// const pwSpecialChar = new RegExp(/(?=.[!@#$%^&])/);
 
 module.exports = {
   pwNumeric: function (password) {

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import InputField from "../InputField";
-import PasswordReqAlert from "./PasswordReqAlert";
+import InputField from "../../signIn/InputField";
+import PasswordChecklist from "./PasswordChecklist";
+import SuccessMessage from "./SuccessMessage";
 import {
   passwordValidator,
   emailValidator,
   passwordMatchCheck,
   nameLength,
-} from "../AccountsUtils";
-import AccSuccessMessage from "./AccSuccessMessage";
+} from "../../../utils/AccountsUtils";
+
+import { onSignUp } from "../../../controllers/dbController";
 
 const CreateAccount = (props) => {
   const navigate = useNavigate();
@@ -32,8 +34,8 @@ const CreateAccount = (props) => {
     setInput({ ...input, email: { valid: true, data: signUpEmail } });
   }, [signUpEmail]);
 
-  //onClick function
-  const onSignup = async () => {
+  //in API CONTROLLER onClick function
+  const onSignup = async (user_name, email, password) => {
     try {
       const response = await axios.post(
         "http://localhost:6065/create-account",
@@ -119,7 +121,9 @@ const CreateAccount = (props) => {
           />
           <p className="signUp--alert error"></p>
 
-          {password.valid === false && <PasswordReqAlert password={password} />}
+          {password.valid === false && (
+            <PasswordChecklist password={password} />
+          )}
         </div>
 
         {/* -- CONFIRM PASSWORD -- */}
@@ -156,7 +160,7 @@ const CreateAccount = (props) => {
           </button>
         )}
 
-        {isSuccess && <AccSuccessMessage />}
+        {isSuccess && <SuccessMessage />}
       </div>
     </>
   );

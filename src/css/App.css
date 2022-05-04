@@ -419,6 +419,11 @@ main {
   z-index: 0;
 }
 
+.showInfo__background {
+  background-color: var(--backgroundDark);
+  padding-bottom: 20px;
+}
+
 /* --- [ movie recs ] ---  */
 .showInfo__recs {
   display: flex;
@@ -470,10 +475,10 @@ main {
   flex-direction: column;
 }
 
-.showInfo__details,
+/* .showInfo__details,
 .showInfo__videos {
   background-color: var(--backgroundDark);
-}
+} */
 
 .showInfo__details {
   display: flex;
@@ -497,12 +502,22 @@ main {
 
 .showInfo__left > *,
 .showInfo__right > * {
-  padding: 20px 20px 0 40px;
+  padding: 20px 20px 0 20px;
 }
 
 .showInfo__more {
   font-style: italic;
   color: white;
+  margin: 10px 10px;
+  float: right;
+}
+
+.moreBtn--container {
+  float: right;
+  width: 25%;
+  display: flex;
+  justify-content: left;
+  padding: 10px 20px 0 20px;
 }
 
 /* --- [ movie left - list ] ---  */

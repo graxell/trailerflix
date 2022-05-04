@@ -1,6 +1,6 @@
 import React from "react";
 
-const AccSuccessMessage = () => {
+const SuccessMessage = () => {
   return (
     <>
       <div className="signUp__success--container">
@@ -15,4 +15,4 @@ const AccSuccessMessage = () => {
   );
 };
 
-export default AccSuccessMessage;
+export default SuccessMessage;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
-import { emailValidator } from "./AccountsUtils";
-import ErrorMessage from "../account/CreateAcc/ErrorMessage";
+import { emailValidator } from "../../utils/AccountsUtils";
+import ErrorMessage from "../account/createAccount/ErrorMessage";
+import InputField from "./InputField";
 
 const Signin = (props) => {
   const [errorShake, setErrorShake] = useState("error");
@@ -33,6 +33,7 @@ const Signin = (props) => {
     }
   };
 
+  //  ---- IN API CONTROLLER
   const onSignIn = async () => {
     try {
       const response = await axios.post("http://localhost:6065/signin/", {
@@ -42,8 +43,8 @@ const Signin = (props) => {
 
       if (response.data.status) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user_name", response.data.user_name);
-        localStorage.setItem("email", email.data);
+        // localStorage.setItem("user_name", response.data.user_name);
+        // localStorage.setItem("email", email.data);
         setIsSignedIn(true);
         navigate("/");
         // console.log(response.data);
@@ -96,6 +97,8 @@ const Signin = (props) => {
             </p>
           </div>
         </div>
+
+        {/* <DisplayProfile /> */}
       </div>
     </>
   );

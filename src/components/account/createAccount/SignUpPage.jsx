@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import CreateAccount from "./CreateAccount";
-import { emailValidator } from "../AccountsUtils";
 import ErrorMessage from "./ErrorMessage";
+import { emailValidator } from "../../../utils/AccountsUtils";
 
 const SignupPage = (props) => {
   const [signUpEmail, setSignUpEmail] = useState();

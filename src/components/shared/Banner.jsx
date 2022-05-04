@@ -1,15 +1,16 @@
 import React from "react";
-import banner_Alt from "../assets/images/banner_Alt.png";
+import banner_Alt from "../../assets/images/banner_Alt.png";
 import {
   imageUrlPath,
-  mediaType,
+  getMediaType,
   showTitleHandler,
   showReleaseDate,
   showRatings,
-} from "../Utils";
+} from "../../utils/DataUtils";
+import { getMovieDetails } from "../../controllers/apiController";
 
 const Banner = (props) => {
-  const { show, bannerShow, getMovieDetails, exit, addButtonHandler } = props;
+  const { show, setShow, bannerShow, exit, addButtonHandler } = props;
 
   const { aboutShow } = show;
 
@@ -28,7 +29,9 @@ const Banner = (props) => {
 
   //Button to open official website or alt link in new window
   const handleWatchBtn = () => {
-    const altUrl = `https://www.themoviedb.org/${mediaType}/${id}/watch?locale=GB`;
+    const altUrl = `https://www.themoviedb.org/${getMediaType(
+      title
+    )}/${id}/watch?locale=GB`;
     homepage ? window.open(homepage) : window.open(altUrl);
   };
 
@@ -77,7 +80,11 @@ const Banner = (props) => {
                   <button
                     className="btn__moreInfo"
                     onClick={() => {
-                      getMovieDetails(mediaType(title), id);
+                      getMovieDetails(getMediaType(title), id).then((result) =>
+                        setShow((prevState) => {
+                          return { ...prevState, aboutShow: result };
+                        })
+                      );
                     }}
                   >
                     More Info
