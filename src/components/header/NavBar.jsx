@@ -4,25 +4,12 @@ import NavLeft from "./NavLeft";
 // import AccountMenu from "./AccountMenu";
 
 const NavBar = (props) => {
-  const {
-    homepageLists,
-    getItem,
-    onSignOut,
-    setShow,
-    show,
-    showList,
-    setShowList,
-    addButtonHandler,
-  } = props;
+  const { onSignOut, setShow, setShowList } = props;
   return (
     <>
       <NavLeft
-        homepageLists={homepageLists}
-        getItem={getItem}
         onSignOut={onSignOut}
         setShow={setShow}
-        show={show}
-        showList={showList}
         setShowList={setShowList}
       />
 

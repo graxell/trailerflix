@@ -1,10 +1,50 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import Banner from "../shared/Banner";
 import DisplayShowListSlider from "../layout/DisplayShowListSlider";
-import { homepageHeadings } from "../../utils/PageUtils";
+import { homepageHeadings, randomBanner } from "../../utils/PageUtils";
+import { getShowList } from "../../controllers/apiController";
 
 const Homepage = (props) => {
-  const { addButtonHandler, setShow, banner, homepageLists, show } = props;
+  const [homepageLists, setHomepageLists] = useState({});
+
+  const { addButtonHandler, setShow, setBanner, banner, show } = props;
+
+  //FETCHING API
+  useEffect(() => {
+    getShowList("trending/all/day?").then((result) =>
+      setHomepageLists((prevState) => {
+        return { ...prevState, trending: result };
+      })
+    );
+
+    getShowList("movie/popular?").then((result) =>
+      setHomepageLists((prevState) => {
+        return { ...prevState, popularMovies: result };
+      })
+    );
+
+    getShowList("tv/popular?").then((result) =>
+      setHomepageLists((prevState) => {
+        return { ...prevState, popularSeries: result };
+      })
+    );
+
+    getShowList("movie/top_rated?").then((result) =>
+      setHomepageLists((prevState) => {
+        return { ...prevState, topRatedMovies: result };
+      })
+    );
+
+    getShowList("tv/top_rated?").then((result) =>
+      setHomepageLists((prevState) => {
+        return { ...prevState, topRatedSeries: result };
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    setBanner(randomBanner(homepageLists.trending));
+  }, [homepageLists.trending]);
 
   return (
     <>
@@ -18,12 +58,14 @@ const Homepage = (props) => {
           />
         )}
 
-        <DisplayShowListSlider
-          lists={homepageLists}
-          headingHandler={homepageHeadings}
-          addButtonHandler={addButtonHandler}
-          setShow={setShow}
-        />
+        {homepageLists && (
+          <DisplayShowListSlider
+            lists={homepageLists}
+            headingHandler={homepageHeadings}
+            addButtonHandler={addButtonHandler}
+            setShow={setShow}
+          />
+        )}
       </div>
     </>
   );

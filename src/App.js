@@ -16,10 +16,9 @@ import "./css/App.css";
 import "./css/Accounts.css";
 import "./css/MediaQuery.css";
 import MyAccount from "./components/account/MyAccount";
-import { getShowList } from "./controllers/apiController";
 // import { onSignOut } from "./controllers/dbController";
-import { randomBanner } from "./utils/PageUtils";
 import SearchResult from "./components/pageContainers/SearchResult";
+import { onSignOut } from "./controllers/dbController";
 
 //   ---- [ FUNCTION START ] ----   //
 
@@ -29,7 +28,6 @@ function App() {
   const navigate = useNavigate();
 
   //   ---- [ STATES ] ----   //
-  const [homepageLists, setHomepageLists] = useState({}); //homepage state
   const [show, setShow] = useState({});
   const [banner, setBanner] = useState();
   const [showList, setShowList] = useState(); //list based on genre/search result
@@ -41,41 +39,7 @@ function App() {
   useEffect(() => {
     getToken();
     getItem();
-
-    getShowList("trending/all/day?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, trending: result };
-      })
-    );
-
-    getShowList("movie/popular?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, popularMovies: result };
-      })
-    );
-
-    getShowList("tv/popular?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, popularSeries: result };
-      })
-    );
-
-    getShowList("movie/top_rated?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, topRatedMovies: result };
-      })
-    );
-
-    getShowList("tv/top_rated?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, topRatedSeries: result };
-      })
-    );
   }, []);
-
-  useEffect(() => {
-    randomBanner(homepageLists.trending).then((result) => setBanner(result));
-  }, [homepageLists.trending]);
 
   //   ---- [ LOCAL STORAGE ] ----   //
 
@@ -92,9 +56,9 @@ function App() {
 
   const getToken = () => {
     const token = localStorage.getItem("token");
-    const profile = localStorage.getItem("profile");
+    // const profile = localStorage.getItem("profile");
 
-    if (token && profile) {
+    if (token) {
       setIsSignedIn(true);
     } else {
       navigate("/signup");
@@ -168,14 +132,9 @@ function App() {
 
         {isSignedIn && (
           <NavBar
-            homepageLists={homepageLists}
-            getItem={getItem}
-            isSignedIn={isSignedIn}
+            onSignOut={onSignOut}
             setShow={setShow}
-            show={show}
-            showList={showList}
             setShowList={setShowList}
-            addButtonHandler={addButtonHandler}
           />
         )}
 
@@ -202,10 +161,10 @@ function App() {
             element={
               <Homepage
                 banner={banner}
+                setBanner={setBanner}
                 show={show}
                 setShow={setShow}
                 addButtonHandler={addButtonHandler}
-                homepageLists={homepageLists}
               />
             }
           />
@@ -214,7 +173,6 @@ function App() {
             path="/series"
             element={
               <Series
-                popularSeries={homepageLists.popularSeries}
                 show={show}
                 setShow={setShow}
                 showList={showList}
@@ -228,7 +186,6 @@ function App() {
             path="/films"
             element={
               <Films
-                popularMovies={homepageLists.popularMovies}
                 show={show}
                 setShow={setShow}
                 showList={showList}

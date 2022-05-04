@@ -9,7 +9,7 @@ import {
 import { getMovieDetails } from "../../controllers/apiController";
 
 const ShowThumbnail = (props) => {
-  const { show, setShow, showList, addButtonHandler } = props;
+  const { setShow, showList, addButtonHandler } = props;
 
   const {
     id,
@@ -22,10 +22,8 @@ const ShowThumbnail = (props) => {
     release_date,
   } = showList;
 
-  const media = getMediaType(title);
-
   const getShow = () => {
-    getMovieDetails(media, id).then((result) =>
+    getMovieDetails(getMediaType(title), id).then((result) =>
       setShow((prevState) => {
         return { ...prevState, aboutShow: result };
       })

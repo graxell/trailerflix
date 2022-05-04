@@ -23,24 +23,8 @@ module.exports = {
     }
   },
 
-  getOtherList: async (urlParam) => {
-    const URL = ENDPOINT_URL + urlParam + API_KEY;
-
-    try {
-      const list = await axios.get(URL);
-
-      if (list.data.results) {
-        return list.data.results;
-      } else {
-        return "Sorry, we cannot retrieve this list right now!";
-      }
-    } catch (error) {
-      console.log("Error", error);
-    }
-  },
-
   getMovieDetails: async (mediaType, movieId) => {
-    const SHOW_URL = `${ENDPOINT_URL}${mediaType}/${movieId}?${API_KEY}&append_to_response=videos,credits,watch/providers,images,releases,release_dates`;
+    const SHOW_URL = `${ENDPOINT_URL}${mediaType}/${movieId}?${API_KEY}&append_to_response=videos,credits,watch/providers,images,releases,release_dates,media_type`;
 
     try {
       const response = await axios.get(SHOW_URL);
@@ -50,10 +34,6 @@ module.exports = {
       } else {
         return `Sorry, we cannot retrieve ${mediaType} right now`;
       }
-      // setShow({
-      //   aboutShow: show.data,
-      //   showRecs: recs.data.results,
-      // });
     } catch (error) {
       console.log("Error", error);
     }
@@ -110,6 +90,21 @@ module.exports = {
     }
   },
 
+  getShowsByMediaType: async (mediaType) => {
+    const URL = `${ENDPOINT_URL}discover/${mediaType}?${API_KEY}${DEFAULT_PARAM}`;
+
+    try {
+      const response = await axios.get(URL);
+
+      if (response.data.results) {
+        return response.data.results;
+      } else {
+        return "Sorry, we cannot retrieve the list right now!";
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
   // onSearch: async (searchInput) => {
   //   const searchURL = `${ENDPOINT_URL}search/multi?${API_KEY}&query=${searchInput}${DEFAULT_PARAM}`;
 

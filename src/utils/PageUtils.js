@@ -1,5 +1,5 @@
 module.exports = {
-  randomBanner: async (showList) => {
+  randomBanner: (showList) => {
     if (showList) {
       const showForBanner =
         showList[Math.floor(Math.random() * showList.length)];

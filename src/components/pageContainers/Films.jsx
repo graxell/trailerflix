@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import Banner from "../shared/Banner";
 import DisplayGenreList from "../layout/DisplayGenreList";
 import ListResult from "./ListResult";
-import { getGenreList } from "../../controllers/apiController";
+import {
+  getGenreList,
+  getShowsByMediaType,
+} from "../../controllers/apiController";
 import { randomBanner } from "../../utils/PageUtils";
 
 const Films = (props) => {
@@ -14,14 +17,7 @@ const Films = (props) => {
   });
 
   //-- [ destructure ] --//
-  const {
-    popularMovies,
-    show,
-    setShow,
-    addButtonHandler,
-    setShowList,
-    showList,
-  } = props;
+  const { show, setShow, addButtonHandler, setShowList, showList } = props;
 
   const { genres, mediaType } = movieGenres;
 
@@ -31,10 +27,10 @@ const Films = (props) => {
       setMovieGenres({ ...movieGenres, genres: result })
     );
 
-    randomBanner(popularMovies).then((show) => setMovieBanner(show));
+    getShowsByMediaType("movie").then((result) => {
+      setMovieBanner(randomBanner(result));
+    });
   }, []);
-
-  console.log(showList);
 
   return (
     <>

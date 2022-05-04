@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const NavRight = (props) => {
-  const { onSignOut, setShow, show, showList, setShowList } = props;
+const NavLeft = (props) => {
+  const { onSignOut, setShow, setShowList } = props;
 
   const clearStates = () => {
     setShow({});
@@ -37,4 +37,4 @@ const NavRight = (props) => {
   );
 };
 
-export default NavRight;
+export default NavLeft;

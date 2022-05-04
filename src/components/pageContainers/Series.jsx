@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import Banner from "../shared/Banner";
 import ListResult from "./ListResult";
 import DisplayGenreList from "../layout/DisplayGenreList";
-import { getGenreList } from "../../controllers/apiController";
+import {
+  getGenreList,
+  getShowsByMediaType,
+} from "../../controllers/apiController";
 import { randomBanner } from "../../utils/PageUtils";
 
 const Series = (props) => {
@@ -14,14 +17,7 @@ const Series = (props) => {
   });
 
   //-- [ destructure ] --//
-  const {
-    popularSeries,
-    show,
-    setShow,
-    addButtonHandler,
-    setShowList,
-    showList,
-  } = props;
+  const { show, setShow, addButtonHandler, setShowList, showList } = props;
 
   const { genres, mediaType } = seriesGenres;
 
@@ -31,7 +27,9 @@ const Series = (props) => {
       setSeriesGenres({ ...seriesGenres, genres: result })
     );
 
-    randomBanner(popularSeries).then((show) => setSeriesBanner(show));
+    getShowsByMediaType("tv").then((result) => {
+      setSeriesBanner(randomBanner(result));
+    });
   }, []);
 
   return (

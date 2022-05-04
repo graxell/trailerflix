@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Banner from "../shared/Banner";
 import DisplayShowListSlider from "../layout/DisplayShowListSlider";
-import { getOtherList } from "../../controllers/apiController";
+import { getShowList } from "../../controllers/apiController";
 import { randomBanner, newAndPopularHeadings } from "../../utils/PageUtils";
 
 const NewAndPopular = (props) => {
@@ -10,25 +10,25 @@ const NewAndPopular = (props) => {
   const { setBanner, banner, addButtonHandler, show, setShow } = props;
 
   useEffect(() => {
-    getOtherList("tv/airing_today?").then((result) =>
+    getShowList("tv/airing_today?").then((result) =>
       setNewAndPopularShows((prevState) => {
         return { ...prevState, airingToday: result };
       })
     );
 
-    getOtherList("movie/now_playing?").then((result) =>
+    getShowList("movie/now_playing?").then((result) =>
       setNewAndPopularShows((prevState) => {
         return { ...prevState, latest: result };
       })
     );
 
-    getOtherList("tv/on_the_air?").then((result) =>
+    getShowList("tv/on_the_air?").then((result) =>
       setNewAndPopularShows((prevState) => {
         return { ...prevState, ongoingTv: result };
       })
     );
 
-    getOtherList("movie/upcoming?").then((result) =>
+    getShowList("movie/upcoming?").then((result) =>
       setNewAndPopularShows((prevState) => {
         return { ...prevState, upcoming: result };
       })
@@ -36,9 +36,7 @@ const NewAndPopular = (props) => {
   }, []);
 
   useEffect(() => {
-    randomBanner(newAndPopularShows.upcoming).then((result) => {
-      setBanner(result);
-    });
+    setBanner(randomBanner(newAndPopularShows.upcoming));
   }, [newAndPopularShows.upcoming]);
 
   return (
