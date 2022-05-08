@@ -10,13 +10,14 @@ import NewAndPopular from "./components/pageContainers/NewAndPopular";
 import MyWatchList from "./components/account/MyWatchList";
 import SignupPage from "./components/account/createAccount/SignUpPage";
 import Signin from "./components/signIn/Signin";
+import Profiles from "./components/account/Profiles";
 import CreateAccount from "./components/account/createAccount/CreateAccount";
 import logo from "./assets/images/logo.png";
 import "./css/App.css";
 import "./css/Accounts.css";
 import "./css/MediaQuery.css";
+import "./css/Profiles.css";
 import MyAccount from "./components/account/MyAccount";
-// import { onSignOut } from "./controllers/dbController";
 import SearchResult from "./components/pageContainers/SearchResult";
 import { onSignOut } from "./controllers/dbController";
 
@@ -33,6 +34,7 @@ function App() {
   const [showList, setShowList] = useState(); //list based on genre/search result
   const [myList, setMyList] = useState([]);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [profile, setProfile] = useState({ assigned: "", manage: false });
 
   //   ---- [ useEffect CALLS ] ----   //
 
@@ -56,13 +58,25 @@ function App() {
 
   const getToken = () => {
     const token = localStorage.getItem("token");
-    // const profile = localStorage.getItem("profile");
 
-    if (token) {
-      setIsSignedIn(true);
-    } else {
+    if (!token) {
       navigate("/signup");
+    } else if (token && !isSignedIn.profile) {
+      navigate("/profiles");
+    } else {
     }
+
+    // if (token && !profile) {
+    //   navigate("/profiles");
+    // }
+
+    console.log(isSignedIn);
+
+    // if (token & profile) {
+    //   setIsSignedIn(true);
+    // } else {
+    //   navigate("/signup");
+    // }
   };
 
   //add show to list
@@ -153,6 +167,12 @@ function App() {
             element={
               <Signin isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} />
             }
+          />
+
+          <Route
+            exact
+            path="/profiles"
+            element={<Profiles setProfile={setProfile} profile={profile} />}
           />
 
           <Route

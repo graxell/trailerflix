@@ -22,7 +22,7 @@ module.exports = {
     }
   },
 
-  onSignup: async function (user_name, email, password) {
+  onSignUp: async function (user_name, email, password) {
     try {
       const response = await axios.post(
         "http://localhost:6065/create-account",
@@ -79,6 +79,99 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getProfiles: async function () {
+    try {
+      const response = await axios.get("http://localhost:6065/all-profiles/", {
+        headers: { token: localStorage.getItem("token") },
+      });
+
+      if (response.data.status === 1) {
+        return response.data.payload;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  onProfileEdit: async function (profileName, type, payload) {
+    try {
+      const response = await axios.patch(
+        "http://localhost:6065/edit-profile/",
+        { currentProfileName: profileName, type: type, payload: payload },
+
+        { headers: { token: localStorage.getItem("token") } }
+      );
+
+      if (response.data.status === 1) {
+        return response.data;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  onAddProfile: async (profileName) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:6065/add-profile/",
+        { profile_name: profileName },
+        { headers: { token: localStorage.getItem("token") } }
+      );
+
+      if (response.data.status === 1) {
+        return response.data;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  onRemoveProfile: async function (profile_name) {
+    try {
+      const response = await axios.delete(
+        "http://localhost:6065/remove-profile/",
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+            profile_name: profile_name,
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        return response.data.status;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  onAddShow: async function () {
+    try {
+      const response = await axios.delete(
+        `http://localhost:6065/signout/${localStorage.getItem("email")}`,
+        { headers: { token: localStorage.getItem("token") } }
+      );
+    } catch {}
+  },
+
+  onRemoveShow: async function () {
+    try {
+      const response = await axios.delete(
+        `http://localhost:6065/signout/${localStorage.getItem("email")}`,
+        { headers: { token: localStorage.getItem("token") } }
+      );
+    } catch {}
   },
 };
 

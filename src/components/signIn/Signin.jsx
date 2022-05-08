@@ -81,6 +81,7 @@ const Signin = (props) => {
                 label={key.charAt(0).toUpperCase() + key.slice(1)}
                 name={key}
                 input={signInDetails[key]}
+                inputStyle={"input__light"}
               />
             );
           })}

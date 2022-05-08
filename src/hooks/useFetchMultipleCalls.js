@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useFetchShowList from "./useFetchShow";
+import useFetchShowList from "./useFetchData";
 
 const useFetchMultipleCalls = () => {
   const { data, isLoading, error } = useFetchShowList(key, url);

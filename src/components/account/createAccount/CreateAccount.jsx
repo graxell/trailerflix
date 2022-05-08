@@ -27,7 +27,7 @@ const CreateAccount = (props) => {
 
   //destructuring
   const { user_name, email, password, repeatedPassword } = input;
-  const { getScreenPage, signUpEmail } = props;
+  const { signUpEmail } = props;
 
   //when mounted
   useEffect(() => {
@@ -45,7 +45,6 @@ const CreateAccount = (props) => {
           password: password.data,
         }
       );
-      // getScreenPage(0),
       console.log(input);
       if (response.data.status) {
         setIsSuccess(true);
@@ -78,6 +77,7 @@ const CreateAccount = (props) => {
             label={"Name"}
             name={"user_name"}
             input={user_name}
+            inputStyle={"input__light"}
           />
 
           {user_name.valid === false && (
@@ -99,6 +99,7 @@ const CreateAccount = (props) => {
             name={"email"}
             input={email}
             value={email.data}
+            inputStyle={"input__light"}
           />
           {email.valid === false && (
             <p className="signUp--alert error">{email.error}</p>
@@ -118,6 +119,7 @@ const CreateAccount = (props) => {
             label={password.data ? "Password" : "Add a password"}
             name={"password"}
             input={password}
+            inputStyle={"input__light"}
           />
           <p className="signUp--alert error"></p>
 
@@ -148,6 +150,7 @@ const CreateAccount = (props) => {
             label={"Confirm password"}
             name={"repeatedPassword"}
             input={repeatedPassword}
+            inputStyle={"input__light"}
           />
           {repeatedPassword.valid === false && (
             <p className="signUp--alert error">{repeatedPassword.error}</p>

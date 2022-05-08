@@ -2,6 +2,8 @@
   --backgroundDark: rgb(24, 24, 24);
   --backgroundDarker: rgb(20, 20, 20);
   --greyTransparent: rgba(20, 20, 20, 0.973);
+  --darkGrey: rgba(78, 78, 78, 0.541);
+  --lightGreyFont: rgb(128, 128, 128);
   --validGreen: rgb(28, 117, 32);
   --errorRed: rgb(235, 55, 55);
 }

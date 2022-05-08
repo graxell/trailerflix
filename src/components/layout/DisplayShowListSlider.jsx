@@ -11,7 +11,7 @@ const DisplayShowListSlider = (props) => {
       {Object.keys(lists).map((key, index) => {
         return (
           <div key={index} className="homepage__lists">
-            <h2>{headingHandler(key)}</h2>
+            <h2>{headingHandler[index]}</h2>
             <div className="homepage__sliders">
               {lists[key].map((item, key) => {
                 return (

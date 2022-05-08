@@ -7,31 +7,20 @@ module.exports = {
     }
   },
 
-  homepageHeadings: (key) => {
-    if (key === "trending") {
-      return "Trending Now";
-    } else if (key === "popularMovies") {
-      return "Must-watch Films";
-    } else if (key === "popularSeries") {
-      return "Popular Series";
-    } else if (key === "topRatedMovies") {
-      return "Discover Great Films";
-    } else {
-      return "Binge-worthy TV Shows";
-    }
-  },
+  homepageHeadings: [
+    "Trending Now",
+    "Must-watch Films",
+    "Popular Series",
+    "Discover Great Films",
+    "Binge-worthy TV Shows",
+  ],
 
-  newAndPopularHeadings: (key) => {
-    if (key === "airingToday") {
-      return "Don't miss on TV today!";
-    } else if (key === "latest") {
-      return "Latest Films";
-    } else if (key === "ongoingTv") {
-      return "Programmes currently on air";
-    } else {
-      return "Coming soon in theatres";
-    }
-  },
+  newAndPopularHeadings: [
+    "Don't miss on TV today!",
+    "Latest Films",
+    "Programmes currently on air",
+    "Coming soon in theatres",
+  ],
 };
 
 // {mediaType === "movie" ? (

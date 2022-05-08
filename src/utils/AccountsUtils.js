@@ -74,8 +74,8 @@ module.exports = {
   },
 
   userNameCheck: function (user_name) {
-    if (user_name < 2) {
-      return "Names must be at least 2 characters";
+    if (user_name < 3) {
+      return "Names must be at least 3 characters";
     }
   },
 
@@ -93,5 +93,22 @@ module.exports = {
 
   triggerErrorShake: function () {
     return "error shake";
+  },
+
+  accountColours: ["crayola", "orange", "seaGreen", "violet", "lemon", "blue"],
+
+  profileNameCheck: function (array, current, newName) {
+    if (current && current === newName) {
+      return { error: "Oops, you forgot to change something!" };
+    } else if (
+      newName.length < 3 ||
+      array.some((item) => item.profile_name === newName)
+    ) {
+      return {
+        error: "Please enter a new name of at least 3 characters.",
+      };
+    } else {
+      return newName;
+    }
   },
 };
