@@ -1,0 +1,52 @@
+.line__divider {
+  border-top: var(--darkGrey) 1px solid;
+  border-bottom: var(--darkGrey) 1px solid;
+  padding: 10px 0;
+  margin: 10px 0;
+}
+
+.flex__center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav__profiles {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 0;
+}
+
+.nav__profiles > p {
+  font-size: 0.9em;
+  margin: 0 5px;
+}
+
+.nav__profiles:hover > p {
+  text-decoration: underline;
+}
+
+.navRight__dropDown--trigger {
+  position: absolute;
+  right: 40px;
+  cursor: pointer;
+  z-index: 2;
+}
+.navRight__dropDown {
+  position: absolute;
+  top: 40px;
+  right: 42px;
+  background-color: var(--blackTransparent);
+  width: 180px;
+  padding: 10px 10px;
+}
+
+.navRight__dropDown {
+  display: none;
+}
+
+.navRight__dropDown--trigger:hover ~ .navRight__dropDown,
+.navRight__dropDown:hover {
+  display: block;
+}

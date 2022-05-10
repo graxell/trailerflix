@@ -7,9 +7,6 @@ import { emailValidator } from "../../../utils/AccountsUtils";
 const SignupPage = (props) => {
   const [signUpEmail, setSignUpEmail] = useState();
   const [screen, setScreen] = useState(0);
-  const [errorShake, setErrorShake] = useState("error");
-
-  const { getScreenPage } = props;
 
   const onInput = (e) => {
     setSignUpEmail(emailValidator(e.target.value));
@@ -18,12 +15,11 @@ const SignupPage = (props) => {
   const onSignUp = async () => {
     try {
       const response = await axios.post("http://localhost:6065/emailCheck/", {
-        email: signUpEmail.data,
+        email: signUpEmail,
       });
 
       if (response.data.status === 0) {
         setSignUpEmail({
-          valid: false,
           error: response.data.error,
         });
         console.log(response.data.error);
@@ -61,11 +57,7 @@ const SignupPage = (props) => {
 
               <button
                 className="signUp__input--btn"
-                onClick={() =>
-                  signUpEmail && signUpEmail.valid === false
-                    ? setErrorShake("error shake")
-                    : onSignUp()
-                }
+                onClick={() => signUpEmail && !signUpEmail.error && onSignUp()}
               >
                 Get Started &rsaquo;
               </button>
@@ -73,21 +65,14 @@ const SignupPage = (props) => {
 
             {/* Error message */}
             {signUpEmail && signUpEmail.error && (
-              <ErrorMessage
-                errorShake={errorShake}
-                setErrorShake={setErrorShake}
-                error={signUpEmail.error}
-              />
+              <ErrorMessage error={signUpEmail.error} />
             )}
           </div>
         </div>
       )}
 
       {signUpEmail && screen === 1 && (
-        <CreateAccount
-          getScreenPage={getScreenPage}
-          signUpEmail={signUpEmail.data}
-        />
+        <CreateAccount signUpEmail={signUpEmail} />
       )}
     </>
   );

@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { emailValidator } from "../../utils/AccountsUtils";
 import ErrorMessage from "../account/createAccount/ErrorMessage";
 import InputField from "./InputField";
+import { signInReq } from "../../controllers/dbController";
 
 const Signin = (props) => {
   const [errorShake, setErrorShake] = useState("error");
+  const [errorMessage, setErrorMessage] = useState();
   const [signInDetails, setSignInDetails] = useState({
     email: "",
     password: "",
@@ -33,30 +35,16 @@ const Signin = (props) => {
     }
   };
 
-  //  ---- IN API CONTROLLER
-  const onSignIn = async () => {
-    try {
-      const response = await axios.post("http://localhost:6065/signin/", {
-        email: email.data,
-        password: password,
-      });
-
-      if (response.data.status) {
-        localStorage.setItem("token", response.data.token);
-        // localStorage.setItem("user_name", response.data.user_name);
-        // localStorage.setItem("email", email.data);
-        setIsSignedIn(true);
-        navigate("/");
-        // console.log(response.data);
+  const onSignIn = (email, password) => {
+    signInReq(email, password).then((result) => {
+      console.log(result);
+      if (result && !result.error) {
+        console.log(result);
+        navigate("/profiles");
       } else {
-        setSignInDetails({
-          ...signInDetails,
-          email: { error: response.data.error },
-        });
+        setErrorMessage(result.error);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
   const key = Object.values(signInDetails);
@@ -68,14 +56,15 @@ const Signin = (props) => {
         <div className="signIn__input--wrapper">
           <h2 className="signIn__header">Sign In</h2>
           <ErrorMessage
-            error={email.error}
+            error={email.error || errorMessage}
             errorShake={errorShake}
             setErrorShake={setErrorShake}
           />
 
-          {Object.keys(signInDetails).map((key) => {
+          {Object.keys(signInDetails).map((key, index) => {
             return (
               <InputField
+                key={index}
                 setValue={handleInput}
                 type={key === "password" ? "password" : "text"}
                 label={key.charAt(0).toUpperCase() + key.slice(1)}
@@ -85,7 +74,10 @@ const Signin = (props) => {
               />
             );
           })}
-          <button className="signIn__btn" onClick={onSignIn}>
+          <button
+            className="signIn__btn"
+            onClick={() => onSignIn(email, password)}
+          >
             Sign In
           </button>
 

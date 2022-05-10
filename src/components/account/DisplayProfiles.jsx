@@ -1,40 +1,37 @@
 import React from "react";
 import ProfileCard from "./ProfileCard";
+import Button from "../shared/Button";
 
 const DisplayProfiles = (props) => {
-  const { allProfiles, setProfile, profile, manageAll, setManageAll } = props;
+  const { setIsSignedIn, setProfiles, profiles, manageAll, setManageAll } =
+    props;
   return (
     <>
       <h2 className="profiles__heading">
-        {profile.manage ? "Manage Profiles:" : "Who's Watching?"}
+        {profiles && profiles.manage ? "Manage Profiles:" : "Who's Watching?"}
       </h2>
 
       <ProfileCard
-        list={allProfiles}
-        setProfile={setProfile}
-        profile={profile}
+        list={profiles.all}
+        setProfiles={setProfiles}
+        profiles={profiles}
         setManageAll={setManageAll}
         manageAll={manageAll}
+        setIsSignedIn={setIsSignedIn}
       />
 
-      {!profile.manage ? (
-        <div
-          onClick={() => {
-            setProfile({ ...profile, manage: true });
-          }}
-          className="profiles__btn dark__btn"
-        >
-          Manage Profiles
-        </div>
+      {!profiles.manage ? (
+        <Button
+          onClick={() => setProfiles({ ...profiles, manage: true })}
+          styleName={"profiles__btn dark__btn"}
+          btnName={"Manage Profiles"}
+        />
       ) : (
-        <div
-          onClick={() => {
-            setProfile({ ...profile, manage: false });
-          }}
-          className="profiles__btn whiteRed__btn"
-        >
-          Done
-        </div>
+        <Button
+          onClick={() => setProfiles({ ...profiles, manage: false })}
+          styleName={"profiles__btn whiteRed__btn"}
+          btnName={"Done"}
+        />
       )}
     </>
   );

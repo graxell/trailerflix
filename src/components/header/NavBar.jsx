@@ -1,20 +1,27 @@
 import React from "react";
-import Search from "./Search";
 import NavLeft from "./NavLeft";
+import NavRight from "./NavRight";
 // import AccountMenu from "./AccountMenu";
 
 const NavBar = (props) => {
-  const { onSignOut, setShow, setShowList } = props;
+  const { setShow, setShowList, profiles, setProfiles, setIsSignedIn } = props;
   return (
     <>
       <NavLeft
-        onSignOut={onSignOut}
         setShow={setShow}
         setShowList={setShowList}
+        profiles={profiles}
+        setProfiles={setProfiles}
+        setIsSignedIn={setIsSignedIn}
       />
 
-      <Search setShowList={setShowList} />
-
+      <NavRight
+        setProfiles={setProfiles}
+        profiles={profiles}
+        list={profiles.all}
+        setShowList={setShowList}
+        setIsSignedIn={setIsSignedIn}
+      />
       {/* <button onClick={onSignOut}>Logout</button> */}
     </>
   );

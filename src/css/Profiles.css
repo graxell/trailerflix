@@ -64,9 +64,9 @@
 
 /* PICTURE SIZE SELECTOR */
 .picture__navSmall {
-  width: 40px;
-  height: 40px;
-  font-size: 2em;
+  width: 35px;
+  height: 35px;
+  font-size: 1.5em;
 }
 
 .picture__medium {

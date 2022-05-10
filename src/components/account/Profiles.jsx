@@ -5,35 +5,33 @@ import DisplayProfiles from "./DisplayProfiles";
 import ManageProfile from "./ManageProfile";
 
 const Profiles = (props) => {
-  const { setProfile, profile } = props;
+  const { setProfiles, profiles, setIsSignedIn } = props;
 
-  const [allProfiles, setAllProfiles] = useState();
   const [manageAll, setManageAll] = useState({});
 
   useEffect(() => {
-    getProfiles().then((result) => setAllProfiles(result));
+    getProfiles().then((result) => setProfiles({ ...profiles, all: result }));
   }, []);
 
-  console.log(manageAll);
+  console.log(profiles);
 
   return (
     <>
       <div className="profiles__container">
         {!manageAll.edit && !manageAll.add && (
           <DisplayProfiles
-            allProfiles={allProfiles}
-            setProfile={setProfile}
-            profile={profile}
+            setProfiles={setProfiles}
+            profiles={profiles}
             setManageAll={setManageAll}
             manageAll={manageAll}
+            setIsSignedIn={setIsSignedIn}
           />
         )}
 
         {manageAll && (manageAll.edit || manageAll.add) && (
           <ManageProfile
-            allProfiles={allProfiles}
-            setAllProfiles={setAllProfiles}
-            profile={profile}
+            setProfiles={setProfiles}
+            profiles={profiles}
             manageAll={manageAll}
             setManageAll={setManageAll}
           />

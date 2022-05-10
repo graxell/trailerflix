@@ -19,7 +19,7 @@ import "./css/MediaQuery.css";
 import "./css/Profiles.css";
 import MyAccount from "./components/account/MyAccount";
 import SearchResult from "./components/pageContainers/SearchResult";
-import { onSignOut } from "./controllers/dbController";
+import { getWatchList } from "./controllers/dbController";
 
 //   ---- [ FUNCTION START ] ----   //
 
@@ -34,14 +34,19 @@ function App() {
   const [showList, setShowList] = useState(); //list based on genre/search result
   const [myList, setMyList] = useState([]);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [profile, setProfile] = useState({ assigned: "", manage: false });
+  const [profiles, setProfiles] = useState({});
 
   //   ---- [ useEffect CALLS ] ----   //
 
   useEffect(() => {
-    getToken();
-    getItem();
+    getAuth();
   }, []);
+
+  useEffect(() => {
+    getWatchList(profiles.assigned).then((result) => {
+      setMyList(result);
+    });
+  });
 
   //   ---- [ LOCAL STORAGE ] ----   //
 
@@ -56,27 +61,16 @@ function App() {
     console.log(savedList);
   };
 
-  const getToken = () => {
+  const getAuth = () => {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      navigate("/signup");
-    } else if (token && !isSignedIn.profile) {
-      navigate("/profiles");
+    if (token) {
+      setIsSignedIn(true);
     } else {
+      setIsSignedIn(false);
     }
 
-    // if (token && !profile) {
-    //   navigate("/profiles");
-    // }
-
     console.log(isSignedIn);
-
-    // if (token & profile) {
-    //   setIsSignedIn(true);
-    // } else {
-    //   navigate("/signup");
-    // }
   };
 
   //add show to list
@@ -144,13 +138,14 @@ function App() {
           />
         </h1>
 
-        {isSignedIn && (
-          <NavBar
-            onSignOut={onSignOut}
-            setShow={setShow}
-            setShowList={setShowList}
-          />
-        )}
+        <NavBar
+          setShow={setShow}
+          setShowList={setShowList}
+          profiles={profiles}
+          setProfiles={setProfiles}
+          setIsSignedIn={setIsSignedIn}
+          isSignedIn={isSignedIn}
+        />
 
         {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />}
       </header>
@@ -172,7 +167,13 @@ function App() {
           <Route
             exact
             path="/profiles"
-            element={<Profiles setProfile={setProfile} profile={profile} />}
+            element={
+              <Profiles
+                setProfiles={setProfiles}
+                profiles={profiles}
+                setIsSignedIn={setIsSignedIn}
+              />
+            }
           />
 
           <Route
@@ -241,7 +242,12 @@ function App() {
 
           <Route
             path="/my-account"
-            element={<MyAccount addButtonHandler={addButtonHandler} />}
+            element={
+              <MyAccount
+                addButtonHandler={addButtonHandler}
+                profiles={profiles}
+              />
+            }
           />
 
           <Route

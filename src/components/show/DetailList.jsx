@@ -1,14 +1,22 @@
 import React from "react";
+import ListItem from "./Listitem";
 
 const DetailList = (props) => {
-  const { list } = props;
+  const { list, style, onClick } = props;
   return (
     <>
       {list.map((item) => {
+        const { id, name } = item;
         return (
-          <>
-            <li key={item.id}>{item.name}</li>
-          </>
+          <ListItem
+            onClick={onClick}
+            className={style}
+            key={id}
+            itemName={name}
+          />
+          // <li onClick={onClick} className={style} key={id}>
+          //   {name}
+          // </li>
         );
       })}
     </>

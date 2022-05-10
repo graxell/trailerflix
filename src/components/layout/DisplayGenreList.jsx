@@ -1,5 +1,6 @@
 import React from "react";
 import { getShowsByGenre } from "../../controllers/apiController";
+import ListItem from "../show/Listitem";
 
 const DisplayGenreList = (props) => {
   const { genres, setShowList, mediaType } = props;
@@ -11,17 +12,16 @@ const DisplayGenreList = (props) => {
           genres.map((genre) => {
             const { id, name } = genre;
             return (
-              <li
-                className="genre--box"
+              <ListItem
+                style={"genre--box"}
                 key={id}
+                itemName={name}
                 onClick={() => {
                   getShowsByGenre(mediaType, id, name).then((results) =>
                     setShowList(results)
                   );
                 }}
-              >
-                {name}
-              </li>
+              />
             );
           })}
       </ul>

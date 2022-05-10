@@ -1,6 +1,7 @@
 :root {
   --backgroundDark: rgb(24, 24, 24);
   --backgroundDarker: rgb(20, 20, 20);
+  --blackTransparent: rgba(0, 0, 0, 0.877);
   --greyTransparent: rgba(20, 20, 20, 0.973);
   --darkGrey: rgba(78, 78, 78, 0.541);
   --lightGreyFont: rgb(128, 128, 128);
@@ -143,7 +144,7 @@ nav {
   height: 35px;
   width: 40%;
   top: 5px;
-  right: 20px;
+  right: 80px;
   display: flex;
   position: absolute;
 }
@@ -235,7 +236,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-inline: 20px;
+  padding: 20px 20px 0 20px;
   background: var(--backgroundDark);
 }
 
@@ -555,8 +556,8 @@ main {
 
 .btn__exit {
   position: absolute;
-  top: 30px;
-  right: 20px;
+  top: 40px;
+  right: 30px;
   border: rgb(15, 15, 15) solid 2px;
   background: rgb(15, 15, 15);
 }

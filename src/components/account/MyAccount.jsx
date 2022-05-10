@@ -1,49 +1,93 @@
 import React from "react";
+import AccountDetails from "./AccountDetails";
+import Button from "../shared/Button";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { getUserDetails, updateRequest } from "../../controllers/dbController";
+import { getDate } from "../../utils/DataUtils";
+import PasswordUpdate from "./PasswordUpdate";
+import EmailUpdate from "./EmailUpdate";
 
 const MyAccount = () => {
   const [userDetails, setUserDetails] = useState({});
-
-  //   const { email, password, user_name } = userDetails;
+  const [update, setUpdate] = useState({});
 
   useEffect(() => {
-    getUserDetails();
+    getUserDetails().then((result) => {
+      setUserDetails(result);
+    });
   }, []);
 
-  //  -- IN API CONTROLLER
-  const getUserDetails = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:6065/view-account/${localStorage.getItem("email")}`,
-
-        { headers: { token: localStorage.getItem("token") } }
-      );
-
-      console.log(response);
-      if (response.data.status) {
-        setUserDetails(response.data.payload);
-        console.log(response.data.payload);
+  const onUpdate = (type, payload, password) => {
+    updateRequest(type, payload, password).then((result) => {
+      if (result) {
+        console.log(result);
+        setUpdate({
+          ...update,
+          password: false,
+          email: false,
+          success: result,
+        });
+        getUserDetails().then((result) => {
+          setUserDetails(result);
+        });
       } else {
-        setUserDetails({ error: "Cannot retrieve details." });
+        setUpdate({ ...update, error: result });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
-  console.log(userDetails);
+  console.log(update, userDetails);
   return (
     <>
-      <div>
-        {Object.keys(userDetails).map((key) => {
-          return (
-            <div>
-              <h3>{key.charAt(0).toUpperCase() + key.slice(1)}</h3>
-              <p>{userDetails[key]}</p>
-            </div>
-          );
-        })}
+      <div className="account--container">
+        <h2 className="account__heading line__divider">
+          My Account{" "}
+          <span>{`Member since ${getDate(userDetails.entry_date)}`}</span>
+        </h2>
+
+        <AccountDetails
+          userDetails={userDetails}
+          update={update}
+          setUpdate={setUpdate}
+        />
+
+        {update && !update.account ? (
+          <Button
+            onClick={() => {
+              setUpdate({ ...update, account: true });
+            }}
+            styleName={"profiles__btn dark__btn"}
+            btnName={"Update Account"}
+          />
+        ) : (
+          <Button
+            onClick={() => {
+              setUpdate({ ...update, account: false });
+            }}
+            styleName={"profiles__btn whiteRed__btn"}
+            btnName={"Done"}
+          />
+        )}
+
+        {update && update.password && (
+          <PasswordUpdate
+            userDetails={userDetails}
+            update={update}
+            setUpdate={setUpdate}
+            setUserDetails={setUserDetails}
+            onUpdate={onUpdate}
+          />
+        )}
+
+        {update && update.email && (
+          <EmailUpdate
+            userDetails={userDetails}
+            update={update}
+            setUpdate={setUpdate}
+            setUserDetails={setUserDetails}
+            onUpdate={onUpdate}
+          />
+        )}
       </div>
     </>
   );

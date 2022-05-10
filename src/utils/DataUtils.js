@@ -47,6 +47,18 @@ module.exports = {
     return date;
   },
 
+  getDate: (date) => {
+    const newDate = new Date(`'${date}'`.split("T")).toLocaleDateString(
+      "en-GB",
+      {
+        year: "numeric",
+        month: "long",
+      }
+    );
+
+    return newDate;
+  },
+
   displayLanguage: new Intl.DisplayNames(["en"], {
     type: "language",
   }),

@@ -6,7 +6,7 @@ module.exports = {
   getUserDetails: async function () {
     try {
       const response = await axios.get(
-        `http://localhost:6065/view-account/${localStorage.getItem("email")}`,
+        `http://localhost:6065/view-account/`,
 
         { headers: { token: localStorage.getItem("token") } }
       );
@@ -22,7 +22,28 @@ module.exports = {
     }
   },
 
-  onSignUp: async function (user_name, email, password) {
+  updateRequest: async function (type, payload, password) {
+    try {
+      const response = await axios.patch(
+        "http://localhost:6065/update",
+        {
+          type: type,
+          payload: payload,
+          password: password,
+        },
+        { headers: { token: localStorage.getItem("token") } }
+      );
+      if (response.data.status) {
+        return `Your ${type} was successfully update!`;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  signUpPost: async function (user_name, email, password) {
     try {
       const response = await axios.post(
         "http://localhost:6065/create-account",
@@ -43,18 +64,15 @@ module.exports = {
     }
   },
 
-  onSignIn: async function (email, password) {
+  signInReq: async function (email, password) {
     try {
       const response = await axios.post("http://localhost:6065/signin/", {
         email: email,
         password: password,
       });
-
-      if (response.data.status) {
+      console.log(response);
+      if (response.data.status === 1) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user_name", response.data.user_name);
-        localStorage.setItem("email", email.data);
-        // navigate("/");
         return true;
       } else {
         return { error: response.data.error };
@@ -66,15 +84,13 @@ module.exports = {
 
   onSignOut: async function () {
     try {
-      const response = await axios.delete(
-        `http://localhost:6065/signout/${localStorage.getItem("email")}`,
-        { headers: { token: localStorage.getItem("token") } }
-      );
+      const response = await axios.delete(`http://localhost:6065/signout/`, {
+        headers: { token: localStorage.getItem("token") },
+      });
 
       if (response.data.status === 1) {
         localStorage.clear();
         return false;
-        // navigate("/signin");
       }
     } catch (error) {
       console.log(error);
@@ -156,22 +172,70 @@ module.exports = {
     }
   },
 
-  onAddShow: async function () {
+  getWatchList: async function (profile_name) {
     try {
-      const response = await axios.delete(
-        `http://localhost:6065/signout/${localStorage.getItem("email")}`,
-        { headers: { token: localStorage.getItem("token") } }
-      );
-    } catch {}
+      const response = await axios.get("http://localhost:6065/get-list", {
+        headers: {
+          token: localStorage.getItem("token"),
+          profile_name: `${profile_name}`,
+        },
+      });
+
+      if (response.data.status === 1) {
+        return console.log(response.data);
+        //JSON.parse(response.data.shows);
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
 
-  onRemoveShow: async function () {
+  onAddShow: async function (show, profile_name) {
+    try {
+      const response = await axios.post(
+        "http://localhost:6065/add-show",
+        { show: JSON.stringify(show) },
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+            profile_name: `${profile_name}`,
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        return response.data.status;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  onRemoveShow: async function (id, profile_name) {
     try {
       const response = await axios.delete(
-        `http://localhost:6065/signout/${localStorage.getItem("email")}`,
-        { headers: { token: localStorage.getItem("token") } }
+        "http://localhost:6065/remove-show",
+        { showId: id },
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+            profile_name: `${profile_name}`,
+          },
+        }
       );
-    } catch {}
+
+      if (response.data.status === 1) {
+        return response.data.status;
+      } else {
+        return response.data.error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 

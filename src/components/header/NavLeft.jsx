@@ -1,13 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "../../css/Navigation.css";
 
 const NavLeft = (props) => {
-  const { onSignOut, setShow, setShowList } = props;
+  const { setShow, setShowList, setIsSignedIn, profiles, setProfiles } = props;
+
+  const navigate = useNavigate();
 
   const clearStates = () => {
     setShow({});
     setShowList();
+    setProfiles({ ...profiles, manage: false });
   };
+
   return (
     <>
       <nav>
@@ -28,9 +33,6 @@ const NavLeft = (props) => {
           <li onClick={clearStates}>
             <Link to="/my-list">My List</Link>
           </li>
-          <ul>
-            <li onClick={onSignOut}>Sign out</li>
-          </ul>
         </ul>
       </nav>
     </>

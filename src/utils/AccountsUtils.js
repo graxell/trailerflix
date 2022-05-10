@@ -40,21 +40,20 @@ module.exports = {
   nameLength: function (name) {
     if (name.length < 3) {
       return {
-        valid: false,
+        // valid: false,
         data: name,
         error: "Names must be at least 3 characters.",
       };
     } else {
-      return { valid: true, data: name };
+      return name;
     }
   },
 
   emailValidator: function (email) {
     if (emailFormat.test(email)) {
-      return { valid: true, data: email };
+      return email;
     } else {
       return {
-        valid: false,
         data: email,
         error: "Please enter a valid email address",
       };
@@ -63,12 +62,13 @@ module.exports = {
 
   passwordValidator: function (password) {
     if (passwordReq.test(password)) {
-      return { valid: true, data: password };
+      // return { valid: true, data: password };
+      return password;
     } else {
       return {
-        valid: false,
+        // valid: false,
         data: password,
-        error: "Password doesn't match out criteria.",
+        error: "Password doesn't match our criteria.",
       };
     }
   },
@@ -82,12 +82,11 @@ module.exports = {
   passwordMatchCheck: function (password, passwordRepeated) {
     if (passwordRepeated !== password) {
       return {
-        valid: false,
         data: passwordRepeated,
         error: "Password doesn't match",
       };
     } else {
-      return { valid: true, data: passwordRepeated };
+      return passwordRepeated;
     }
   },
 
@@ -110,5 +109,15 @@ module.exports = {
     } else {
       return newName;
     }
+  },
+
+  getProfileIndex: function (list, item) {
+    const index =
+      list &&
+      list.findIndex((object) => {
+        return object.profile_name === item;
+      });
+
+    return index;
   },
 };

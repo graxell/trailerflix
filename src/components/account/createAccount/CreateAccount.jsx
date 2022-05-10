@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../signIn/InputField";
 import PasswordChecklist from "./PasswordChecklist";
 import SuccessMessage from "./SuccessMessage";
+import { signUpPost } from "../../../controllers/dbController";
 import {
   passwordValidator,
   emailValidator,
@@ -11,19 +11,12 @@ import {
   nameLength,
 } from "../../../utils/AccountsUtils";
 
-import { onSignUp } from "../../../controllers/dbController";
-
 const CreateAccount = (props) => {
   const navigate = useNavigate();
 
   // states
   const [isSuccess, setIsSuccess] = useState(false);
-  const [input, setInput] = useState({
-    user_name: {},
-    email: {},
-    password: {},
-    repeatedPassword: {},
-  });
+  const [input, setInput] = useState({});
 
   //destructuring
   const { user_name, email, password, repeatedPassword } = input;
@@ -31,33 +24,20 @@ const CreateAccount = (props) => {
 
   //when mounted
   useEffect(() => {
-    setInput({ ...input, email: { valid: true, data: signUpEmail } });
-  }, [signUpEmail]);
+    setInput({ ...input, email: signUpEmail });
+  }, []);
 
-  //in API CONTROLLER onClick function
-  const onSignup = async (user_name, email, password) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:6065/create-account",
-        {
-          user_name: user_name.data,
-          email: email.data,
-          password: password.data,
-        }
-      );
-      console.log(input);
-      if (response.data.status) {
+  const onSignUp = () => {
+    signUpPost(user_name, email, password).then((result) => {
+      if (result) {
         setIsSuccess(true);
         setTimeout(() => navigate("/signin"), 1000);
       } else {
-        setInput({ ...input, error: response.data.error });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
-  console.log(input);
+  console.log(input, input.length);
 
   return (
     <>
@@ -71,7 +51,6 @@ const CreateAccount = (props) => {
                 ...input,
                 [e.target.name]: nameLength(e.target.value),
               });
-              console.log(input);
             }}
             type={"text"}
             label={"Name"}
@@ -80,7 +59,7 @@ const CreateAccount = (props) => {
             inputStyle={"input__light"}
           />
 
-          {user_name.valid === false && (
+          {user_name && user_name.error && (
             <p className="signUp--alert error">{user_name.error}</p>
           )}
         </div>
@@ -98,10 +77,10 @@ const CreateAccount = (props) => {
             label={"Email"}
             name={"email"}
             input={email}
-            value={email.data}
+            value={email}
             inputStyle={"input__light"}
           />
-          {email.valid === false && (
+          {email && email.error && (
             <p className="signUp--alert error">{email.error}</p>
           )}
         </div>
@@ -116,22 +95,22 @@ const CreateAccount = (props) => {
               });
             }}
             type={"password"}
-            label={password.data ? "Password" : "Add a password"}
+            label={password ? "Password" : "Add a password"}
             name={"password"}
             input={password}
             inputStyle={"input__light"}
           />
           <p className="signUp--alert error"></p>
 
-          {password.valid === false && (
-            <PasswordChecklist password={password} />
+          {password && password.error && (
+            <PasswordChecklist password={password.data} />
           )}
         </div>
 
         {/* -- CONFIRM PASSWORD -- */}
         <div
           className={
-            repeatedPassword.valid === true
+            repeatedPassword && !repeatedPassword.error
               ? "signUp__field__sections .valid"
               : "signUp__field__sections"
           }
@@ -140,10 +119,7 @@ const CreateAccount = (props) => {
             setValue={(e) => {
               setInput({
                 ...input,
-                [e.target.name]: passwordMatchCheck(
-                  password.data,
-                  e.target.value
-                ),
+                [e.target.name]: passwordMatchCheck(password, e.target.value),
               });
             }}
             type={"password"}
@@ -152,16 +128,17 @@ const CreateAccount = (props) => {
             input={repeatedPassword}
             inputStyle={"input__light"}
           />
-          {repeatedPassword.valid === false && (
+          {repeatedPassword && repeatedPassword.error && (
             <p className="signUp--alert error">{repeatedPassword.error}</p>
           )}
         </div>
 
-        {Object.values(input).every((item) => item.valid === true) && (
-          <button className="signIn__btn" onClick={onSignup}>
-            Sign Up
-          </button>
-        )}
+        {Object.values(input).every((item) => !item.error) &&
+          Object.keys(input).length === 4 && (
+            <button className="signIn__btn" onClick={onSignUp}>
+              Sign Up
+            </button>
+          )}
 
         {isSuccess && <SuccessMessage />}
       </div>

@@ -1,4 +1,4 @@
-import { profileNameCheck } from "../../utils/AccountsUtils";
+import { getProfileIndex, profileNameCheck } from "../../utils/AccountsUtils";
 import InputField from "../signIn/InputField";
 import ProfilePic from "./ProfilePic";
 import Button from "../shared/Button";
@@ -11,16 +11,12 @@ import {
 } from "../../controllers/dbController";
 
 const ManageProfile = (props) => {
-  const { setAllProfiles, allProfiles, manageAll, setManageAll, profile } =
-    props;
+  const { setProfiles, manageAll, setManageAll, profiles } = props;
 
   const { newProfileName, currentProfileName, edit, add, error, toConfirm } =
     manageAll;
 
-  const profileIndex = allProfiles.findIndex((object) => {
-    return object.profile_name === currentProfileName;
-  });
-
+  //onClick functions
   const onEdit = async () => {
     if (!error) {
       const edited = await onProfileEdit(
@@ -30,7 +26,9 @@ const ManageProfile = (props) => {
       );
 
       if (edited.status && edited.status === 1) {
-        await getProfiles().then((result) => setAllProfiles(result));
+        await getProfiles().then((result) =>
+          setProfiles({ ...profiles, all: result })
+        );
         await setManageAll({ ...manageAll, edit: false });
       } else {
         edited.error && setManageAll({ ...manageAll, error: edited.error });
@@ -43,7 +41,9 @@ const ManageProfile = (props) => {
       const added = await onAddProfile(newProfileName);
 
       if (added.status && added.status === 1) {
-        await getProfiles().then((result) => setAllProfiles(result));
+        await getProfiles().then((result) =>
+          setProfiles({ ...profiles, all: result })
+        );
         await setManageAll({ ...manageAll, add: false });
       } else {
         added.error && setManageAll({ ...manageAll, error: added.error });
@@ -56,7 +56,9 @@ const ManageProfile = (props) => {
       const removed = await onRemoveProfile(currentProfileName);
 
       if (removed && removed === 1) {
-        await getProfiles().then((result) => setAllProfiles(result));
+        await getProfiles().then((result) =>
+          setProfiles({ ...profiles, all: result })
+        );
         await setManageAll({
           ...manageAll,
           edit: false,
@@ -68,9 +70,10 @@ const ManageProfile = (props) => {
     }
   };
 
+  //Input function
   const onInput = (e) => {
     const nameCheck = profileNameCheck(
-      allProfiles,
+      profiles.all,
       currentProfileName,
       e.target.value
     );
@@ -90,8 +93,6 @@ const ManageProfile = (props) => {
     }
   };
 
-  console.log(allProfiles, profileIndex);
-
   return (
     <>
       <div className="profile__manage--container">
@@ -101,8 +102,8 @@ const ManageProfile = (props) => {
 
             <div className="profile__manage__form">
               <ProfilePic
-                index={profileIndex}
-                profile={profile}
+                index={getProfileIndex(profiles.all, currentProfileName)}
+                profiles={profiles}
                 profileName={currentProfileName}
                 manageAll={manageAll}
                 sizeSelector={"picture__medium"}
@@ -114,7 +115,7 @@ const ManageProfile = (props) => {
                 name={"newProfileName"}
                 setValue={onInput}
                 value={newProfileName}
-                input={{ data: true }}
+                input={newProfileName}
                 inputStyle={"input__dark"}
               />
             </div>
@@ -122,7 +123,7 @@ const ManageProfile = (props) => {
             <div className="profile__edit--buttons">
               <Button
                 onClick={!toConfirm ? onEdit : ""}
-                style={"profiles__btn whiteRed__btn"}
+                styleName={"profiles__btn whiteRed__btn"}
                 btnName={"Continue"}
               />
 
@@ -130,7 +131,7 @@ const ManageProfile = (props) => {
                 onClick={() => {
                   setManageAll({ edit: !edit });
                 }}
-                style={"profiles__btn dark__btn"}
+                styleName={"profiles__btn dark__btn"}
                 btnName={"Cancel"}
               />
 
@@ -138,7 +139,7 @@ const ManageProfile = (props) => {
                 onClick={() =>
                   setManageAll({ ...manageAll, toConfirm: !toConfirm })
                 }
-                style={"profiles__btn dark__btn"}
+                styleName={"profiles__btn dark__btn"}
                 btnName={"Delete Profile"}
               />
             </div>
@@ -166,7 +167,7 @@ const ManageProfile = (props) => {
                   {manageAll.delete && (
                     <Button
                       onClick={onRemove}
-                      style={"profiles__btn whiteRed__btn"}
+                      styleName={"profiles__btn whiteRed__btn"}
                       btnName={"Confim Delete"}
                     />
                   )}
@@ -184,7 +185,7 @@ const ManageProfile = (props) => {
             <div className="profile__manage__form">
               <ProfilePic
                 index={5}
-                profile={profile}
+                profiles={profiles}
                 profileName={smile__icon}
                 manageAll={manageAll}
                 sizeSelector={"picture__medium"}
@@ -203,7 +204,7 @@ const ManageProfile = (props) => {
             <div className="profile__edit--buttons">
               <Button
                 onClick={onAdd}
-                style={"profiles__btn whiteRed__btn"}
+                styleName={"profiles__btn whiteRed__btn"}
                 btnName={"Continue"}
               />
 
@@ -211,7 +212,7 @@ const ManageProfile = (props) => {
                 onClick={() => {
                   setManageAll({ add: !add });
                 }}
-                style={"profiles__btn dark__btn"}
+                styleName={"profiles__btn dark__btn"}
                 btnName={"Cancel"}
               />
             </div>
