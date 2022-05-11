@@ -3,8 +3,14 @@ import ProfileCard from "./ProfileCard";
 import Button from "../shared/Button";
 
 const DisplayProfiles = (props) => {
-  const { setIsSignedIn, setProfiles, profiles, manageAll, setManageAll } =
-    props;
+  const {
+    onAssignProfile,
+    setIsSignedIn,
+    setProfiles,
+    profiles,
+    manageAll,
+    setManageAll,
+  } = props;
   return (
     <>
       <h2 className="profiles__heading">
@@ -18,6 +24,7 @@ const DisplayProfiles = (props) => {
         setManageAll={setManageAll}
         manageAll={manageAll}
         setIsSignedIn={setIsSignedIn}
+        onAssignProfile={onAssignProfile}
       />
 
       {!profiles.manage ? (

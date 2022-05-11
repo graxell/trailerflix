@@ -19,6 +19,11 @@
     right: 100px;
   }
 
+  .navRight__dropDown--trigger {
+    right: 60px;
+    top: 8px;
+  }
+
   .searchBar__btn:focus + .searchBar__input {
     width: 300px;
   }

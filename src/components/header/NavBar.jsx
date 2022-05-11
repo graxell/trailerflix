@@ -4,7 +4,15 @@ import NavRight from "./NavRight";
 // import AccountMenu from "./AccountMenu";
 
 const NavBar = (props) => {
-  const { setShow, setShowList, profiles, setProfiles, setIsSignedIn } = props;
+  const {
+    setShow,
+    setShowList,
+    profiles,
+    setProfiles,
+    setIsSignedIn,
+    isSignedIn,
+    onAssignProfile,
+  } = props;
   return (
     <>
       <NavLeft
@@ -21,6 +29,8 @@ const NavBar = (props) => {
         list={profiles.all}
         setShowList={setShowList}
         setIsSignedIn={setIsSignedIn}
+        isSignedIn={isSignedIn}
+        onAssignProfile={onAssignProfile}
       />
       {/* <button onClick={onSignOut}>Logout</button> */}
     </>

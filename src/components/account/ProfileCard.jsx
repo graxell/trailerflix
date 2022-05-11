@@ -12,6 +12,7 @@ const ProfileCard = (props) => {
     setManageAll,
     manageAll,
     setIsSignedIn,
+    onAssignProfile,
   } = props;
 
   const navigate = useNavigate();
@@ -24,12 +25,6 @@ const ProfileCard = (props) => {
     });
   };
 
-  const onAssign = (profile) => {
-    setProfiles({ ...profiles, assigned: profile.profile_name });
-    setIsSignedIn(true);
-    navigate("/");
-  };
-
   console.log(profiles);
 
   return (
@@ -40,7 +35,9 @@ const ProfileCard = (props) => {
             return (
               <div
                 onClick={() =>
-                  !profiles.manage ? onAssign(item) : onManage(item)
+                  !profiles.manage
+                    ? onAssignProfile(item.profile_name)
+                    : onManage(item)
                 }
                 key={index}
                 className="profile__card"

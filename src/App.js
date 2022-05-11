@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+// import axios from "axios";
 import ShowInfo from "./components/show/ShowInfo"; //need to change name
 import Homepage from "./components/pageContainers/Homepage";
 import NavBar from "./components/header/NavBar";
@@ -19,7 +20,12 @@ import "./css/MediaQuery.css";
 import "./css/Profiles.css";
 import MyAccount from "./components/account/MyAccount";
 import SearchResult from "./components/pageContainers/SearchResult";
-import { getWatchList } from "./controllers/dbController";
+import {
+  getWatchList,
+  onAddShow,
+  onRemoveShow,
+  getProfiles,
+} from "./controllers/dbController";
 
 //   ---- [ FUNCTION START ] ----   //
 
@@ -43,24 +49,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    getWatchList(profiles.assigned).then((result) => {
-      setMyList(result);
-    });
-  });
+    checkProfiles();
+    updateWatchList();
+  }, [profiles.assigned]);
 
-  //   ---- [ LOCAL STORAGE ] ----   //
-
-  const saveToLocalStorage = (list) => {
-    localStorage.setItem("personalShowList", JSON.stringify(list));
-  };
-
-  const getItem = () => {
-    const savedList = JSON.parse(localStorage.getItem("personalShowList"));
-
-    setMyList(savedList);
-    console.log(savedList);
-  };
-
+  //determine is a user is logged in
   const getAuth = () => {
     const token = localStorage.getItem("token");
 
@@ -69,31 +62,67 @@ function App() {
     } else {
       setIsSignedIn(false);
     }
+  };
 
-    console.log(isSignedIn);
+  //get profile list of user
+  const checkProfiles = async () => {
+    try {
+      const user = localStorage.getItem("profile_name");
+      const result = await getProfiles();
+      if (result) {
+        setProfiles({
+          ...profiles,
+          all: result,
+          assigned: user,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //update list
+  const updateWatchList = async () => {
+    try {
+      const list = await getWatchList();
+
+      if (list === 0) {
+        console.log("No list");
+      } else {
+        const arr = [];
+        list.forEach((res) => {
+          arr.push(JSON.parse(res.show));
+        });
+        setMyList(arr);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //add show to list
-  const addToList = (show) => {
-    const newPersonalList = myList ? [...myList, show] : [show];
-    setMyList(newPersonalList);
-    saveToLocalStorage(newPersonalList);
-    console.log(myList);
+  const addToList = async (show) => {
+    const added = await onAddShow(JSON.stringify(show));
+    if (added) {
+      updateWatchList();
+    } else {
+      console.log(added);
+    }
   };
 
-  //remove show from list
-  const removeFromList = (show) => {
-    const newPersonalList = myList.filter(
-      (listItem) => listItem.id !== show.id
-    );
-
-    setMyList(newPersonalList);
-    saveToLocalStorage(newPersonalList);
+  // remove show from list
+  const removeFromList = async (id) => {
+    const removed = await onRemoveShow(id);
+    if (removed === 1) {
+      updateWatchList();
+    } else {
+      console.log(removed);
+    }
   };
 
   //handling add/remove button
   const addButtonHandler = (show, id) => {
-    const listed = myList ? myList.some((item) => item.id === id) : null;
+    const listed = myList && myList.some((item) => item.id === id);
     if (!listed) {
       return (
         <button
@@ -110,7 +139,7 @@ function App() {
         <button
           className="show__btn--remove btn--circle"
           onClick={() => {
-            removeFromList(show);
+            removeFromList(id);
           }}
         >
           &#x2713;
@@ -119,11 +148,25 @@ function App() {
     }
   };
 
+  //replace local storage profile name when profile is changed
+  const onAssignProfile = async (profile) => {
+    const profileChange = localStorage.getItem("profile_name");
+    setProfiles({ ...profiles, assigned: profile });
+
+    profileChange !== profile
+      ? localStorage.setItem("profile_name", profile)
+      : localStorage.setItem("profile_name", profile);
+
+    setIsSignedIn(true);
+    navigate("/");
+  };
+
   // ----  [ SETTING SCREEN FUNCTIONS]  ---- ////
   const handleExitBtn = () => {
     setShow({});
   };
 
+  console.log(myList);
   return (
     <>
       <header>
@@ -145,6 +188,7 @@ function App() {
           setProfiles={setProfiles}
           setIsSignedIn={setIsSignedIn}
           isSignedIn={isSignedIn}
+          onAssignProfile={onAssignProfile}
         />
 
         {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />}
@@ -172,6 +216,7 @@ function App() {
                 setProfiles={setProfiles}
                 profiles={profiles}
                 setIsSignedIn={setIsSignedIn}
+                onAssignProfile={onAssignProfile}
               />
             }
           />
@@ -236,6 +281,7 @@ function App() {
                 myList={myList}
                 setShow={setShow}
                 addButtonHandler={addButtonHandler}
+                isSignedIn={isSignedIn}
               />
             }
           />

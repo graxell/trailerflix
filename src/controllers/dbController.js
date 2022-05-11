@@ -70,7 +70,9 @@ module.exports = {
         email: email,
         password: password,
       });
+
       console.log(response);
+
       if (response.data.status === 1) {
         localStorage.setItem("token", response.data.token);
         return true;
@@ -106,7 +108,7 @@ module.exports = {
       if (response.data.status === 1) {
         return response.data.payload;
       } else {
-        return response.data.error;
+        return response.data.status;
       }
     } catch (error) {
       console.log(error);
@@ -172,41 +174,40 @@ module.exports = {
     }
   },
 
-  getWatchList: async function (profile_name) {
+  getWatchList: async function () {
     try {
       const response = await axios.get("http://localhost:6065/get-list", {
         headers: {
           token: localStorage.getItem("token"),
-          profile_name: `${profile_name}`,
+          profile_name: localStorage.getItem("profile_name"),
         },
       });
 
       if (response.data.status === 1) {
-        return console.log(response.data);
-        //JSON.parse(response.data.shows);
+        return response.data.shows;
       } else {
-        return response.data.error;
+        return response.data.status;
       }
     } catch (error) {
       console.log(error);
     }
   },
 
-  onAddShow: async function (show, profile_name) {
+  onAddShow: async function (show) {
     try {
       const response = await axios.post(
         "http://localhost:6065/add-show",
-        { show: JSON.stringify(show) },
+        { show: show },
         {
           headers: {
             token: localStorage.getItem("token"),
-            profile_name: `${profile_name}`,
+            profile_name: localStorage.getItem("profile_name"),
           },
         }
       );
 
       if (response.data.status === 1) {
-        return response.data.status;
+        return true;
       } else {
         return response.data.error;
       }
@@ -215,18 +216,15 @@ module.exports = {
     }
   },
 
-  onRemoveShow: async function (id, profile_name) {
+  onRemoveShow: async function (id) {
     try {
-      const response = await axios.delete(
-        "http://localhost:6065/remove-show",
-        { showId: id },
-        {
-          headers: {
-            token: localStorage.getItem("token"),
-            profile_name: `${profile_name}`,
-          },
-        }
-      );
+      const response = await axios.delete("http://localhost:6065/remove-show", {
+        headers: {
+          show_id: id,
+          token: localStorage.getItem("token"),
+          profile_name: localStorage.getItem("profile_name"),
+        },
+      });
 
       if (response.data.status === 1) {
         return response.data.status;

@@ -38,8 +38,7 @@ const Signin = (props) => {
   const onSignIn = (email, password) => {
     signInReq(email, password).then((result) => {
       console.log(result);
-      if (result && !result.error) {
-        console.log(result);
+      if (result === true) {
         navigate("/profiles");
       } else {
         setErrorMessage(result.error);

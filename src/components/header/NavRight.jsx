@@ -11,7 +11,15 @@ import "../../css/Navigation.css";
 const NavRight = (props) => {
   const navigate = useNavigate();
 
-  const { list, profiles, setProfiles, setShowList, setIsSignedIn } = props;
+  const {
+    list,
+    profiles,
+    setProfiles,
+    setShowList,
+    setIsSignedIn,
+    isSignedIn,
+    onAssignProfile,
+  } = props;
   const { assigned } = profiles;
 
   const otherProfiles =
@@ -33,71 +41,77 @@ const NavRight = (props) => {
     <>
       <div className="navRight--container">
         <Search setShowList={setShowList} profiles={profiles} />
-        <div className="navRight__dropDown--trigger">
-          <ProfilePic
-            index={getProfileIndex(list, assigned)}
-            profiles={profiles}
-            profileName={assigned}
-            manageAll={false}
-            sizeSelector={"profile__picture picture__navSmall"}
-          />
-        </div>
+        {isSignedIn && (
+          <>
+            <div className="navRight__dropDown--trigger">
+              <ProfilePic
+                index={
+                  list && list.length > 0
+                    ? getProfileIndex(list, assigned)
+                    : "6"
+                }
+                profiles={profiles}
+                profileName={assigned}
+                manageAll={false}
+                sizeSelector={"profile__picture picture__navSmall"}
+              />
+            </div>
 
-        <div className="navRight__dropDown">
-          {otherProfiles &&
-            otherProfiles.map((item, index) => {
-              return (
-                <div
-                  className="nav__profiles"
-                  key={index}
-                  onClick={() => {
-                    setProfiles({ ...profiles, assigned: item.profile_name });
-                  }}
-                >
-                  <ProfilePic
-                    index={getProfileIndex(list, item.profile_name)}
-                    profiles={profiles}
-                    profileName={item.profile_name}
-                    manageAll={false}
-                    sizeSelector={"profile__picture picture__navSmall"}
-                  />
+            <div className="navRight__dropDown">
+              {otherProfiles &&
+                otherProfiles.map((item, index) => {
+                  return (
+                    <div
+                      className="nav__profiles"
+                      key={index}
+                      onClick={() => onAssignProfile(item.profile_name)}
+                    >
+                      <ProfilePic
+                        index={getProfileIndex(list, item.profile_name)}
+                        profiles={profiles}
+                        profileName={item.profile_name}
+                        manageAll={false}
+                        sizeSelector={"profile__picture picture__navSmall"}
+                      />
 
-                  <p>{item.profile_name}</p>
-                </div>
-              );
-            })}
+                      <p>{item.profile_name}</p>
+                    </div>
+                  );
+                })}
 
-          <div
-            className="nav__profiles"
-            onClick={() => {
-              setProfiles({ ...profiles, manage: true });
-              navigate("/profiles");
-            }}
-          >
-            <img
-              src={edit_icon}
-              className="profile__picture picture__navSmall"
-            />
+              <div
+                className="nav__profiles"
+                onClick={() => {
+                  setProfiles({ ...profiles, manage: true });
+                  navigate("/profiles");
+                }}
+              >
+                <img
+                  src={edit_icon}
+                  className="profile__picture picture__navSmall"
+                />
 
-            <p>Manage Profiles</p>
-          </div>
+                <p>Manage Profiles</p>
+              </div>
 
-          <div
-            onClick={() => navigate("/my-account")}
-            className="nav__profiles line__divider"
-          >
-            <img
-              src={account_icon}
-              className="profile__picture picture__navSmall"
-            />
+              <div
+                onClick={() => navigate("/my-account")}
+                className="nav__profiles line__divider"
+              >
+                <img
+                  src={account_icon}
+                  className="profile__picture picture__navSmall"
+                />
 
-            <p>Account</p>
-          </div>
+                <p>Account</p>
+              </div>
 
-          <div className="nav__profiles flex__center">
-            <p onClick={signOut}>Sign Out of Trailerflix</p>
-          </div>
-        </div>
+              <div className="nav__profiles flex__center">
+                <p onClick={signOut}>Sign Out of Trailerflix</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

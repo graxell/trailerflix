@@ -4,8 +4,6 @@ import ShowThumbnail from "../shared/ShowThumbnail";
 const DisplayShowListSlider = (props) => {
   const { lists, setShow, addButtonHandler, headingHandler, show } = props;
 
-  console.log(lists);
-
   return (
     <>
       {Object.keys(lists).map((key, index) => {

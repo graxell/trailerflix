@@ -5,7 +5,7 @@ import DisplayProfiles from "./DisplayProfiles";
 import ManageProfile from "./ManageProfile";
 
 const Profiles = (props) => {
-  const { setProfiles, profiles, setIsSignedIn } = props;
+  const { setProfiles, profiles, setIsSignedIn, onAssignProfile } = props;
 
   const [manageAll, setManageAll] = useState({});
 
@@ -25,6 +25,7 @@ const Profiles = (props) => {
             setManageAll={setManageAll}
             manageAll={manageAll}
             setIsSignedIn={setIsSignedIn}
+            onAssignProfile={onAssignProfile}
           />
         )}
 
