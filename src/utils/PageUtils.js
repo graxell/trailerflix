@@ -22,19 +22,3 @@ module.exports = {
     "Coming soon in theatres",
   ],
 };
-
-// {mediaType === "movie" ? (
-//   <h2 className="list__results--heading">
-//     <span className="pre--heading" onClick={() => setShowList()}>
-//       {heading} &gt;{" "}
-//     </span>{" "}
-//     {mediaType === "tv" ? `${genreName} Programmes` : genreName}
-//   </h2>
-// ) : (
-//   <h2 className="list__results--heading">
-//     <span className="pre--heading" onClick={() => setShowList()}>
-//       {heading} &gt;{" "}
-//     </span>{" "}
-//     {genreName} Programmes
-//   </h2>
-// )}

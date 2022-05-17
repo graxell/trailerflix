@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-// import axios from "axios";
-import ShowInfo from "./components/show/ShowInfo"; //need to change name
-import Homepage from "./components/pageContainers/Homepage";
-import NavBar from "./components/header/NavBar";
-import SignInNav from "./components/header/SignInNav";
-import Series from "./components/pageContainers/Series";
-import Films from "./components/pageContainers/Films";
-import NewAndPopular from "./components/pageContainers/NewAndPopular";
-import MyWatchList from "./components/account/MyWatchList";
-import SignupPage from "./components/account/createAccount/SignUpPage";
-import Signin from "./components/signIn/Signin";
-import Profiles from "./components/account/Profiles";
-import CreateAccount from "./components/account/createAccount/CreateAccount";
+import Show from "./containers/show/Show";
+import Homepage from "./containers/homepage/Homepage";
+import NavBar from "./components/navigation/NavBar";
+import SignInNav from "./components/navigation/SignInNav";
+import Series from "./containers/seriesAndFilms/Series";
+import Films from "./containers/seriesAndFilms/Films";
+import NewAndPopular from "./containers/newAndPopular/NewAndPopular";
+import MyWatchList from "./containers/watchList/MyWatchList";
+import SignupPage from "./containers/account/signUp/SignUpPage";
+import Signin from "./containers/account/signIn/Signin";
+import Profiles from "./containers/profiles/Profiles";
+import CreateAccount from "./containers/account/signUp/CreateAccount";
 import logo from "./assets/images/logo.png";
 import "./css/App.css";
 import "./css/Accounts.css";
 import "./css/MediaQuery.css";
 import "./css/Profiles.css";
-import MyAccount from "./components/account/MyAccount";
-import SearchResult from "./components/pageContainers/SearchResult";
+import MyAccount from "./containers/account/viewAccount/MyAccount";
+import SearchResult from "./containers/searchResults/SearchResult";
 import {
   getWatchList,
   onAddShow,
@@ -30,8 +29,6 @@ import {
 //   ---- [ FUNCTION START ] ----   //
 
 function App() {
-  //   ---- [ parts of url ] ----   //
-
   const navigate = useNavigate();
 
   //   ---- [ STATES ] ----   //
@@ -87,7 +84,7 @@ function App() {
       const list = await getWatchList();
 
       if (list === 0) {
-        console.log("No list");
+        setMyList([]);
       } else {
         const arr = [];
         list.forEach((res) => {
@@ -157,7 +154,8 @@ function App() {
       ? localStorage.setItem("profile_name", profile)
       : localStorage.setItem("profile_name", profile);
 
-    setIsSignedIn(true);
+    await updateWatchList();
+    !isSignedIn && setIsSignedIn(true);
     navigate("/");
   };
 
@@ -189,6 +187,7 @@ function App() {
           setIsSignedIn={setIsSignedIn}
           isSignedIn={isSignedIn}
           onAssignProfile={onAssignProfile}
+          updateWatchList={updateWatchList}
         />
 
         {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />}
@@ -311,7 +310,7 @@ function App() {
         </Routes>
 
         {show.aboutShow && (
-          <ShowInfo
+          <Show
             show={show}
             setShow={setShow}
             exit={handleExitBtn}
