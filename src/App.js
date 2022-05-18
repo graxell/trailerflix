@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Show from "./containers/show/Show";
 import Homepage from "./containers/homepage/Homepage";
 import NavBar from "./components/navigation/NavBar";
-import SignInNav from "./components/navigation/SignInNav";
+// import SignInNav from "./components/navigation/SignInNav";
 import Series from "./containers/seriesAndFilms/Series";
 import Films from "./containers/seriesAndFilms/Films";
 import NewAndPopular from "./containers/newAndPopular/NewAndPopular";
@@ -15,8 +15,8 @@ import CreateAccount from "./containers/account/signUp/CreateAccount";
 import logo from "./assets/images/logo.png";
 import "./css/App.css";
 import "./css/Accounts.css";
-import "./css/MediaQuery.css";
 import "./css/Profiles.css";
+import "./css/MediaQuery.css";
 import MyAccount from "./containers/account/viewAccount/MyAccount";
 import SearchResult from "./containers/searchResults/SearchResult";
 import {
@@ -192,7 +192,7 @@ function App() {
           token={token}
         />
 
-        {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />}
+        {/* {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />} */}
       </header>
 
       <main>
@@ -298,7 +298,7 @@ function App() {
           />
 
           <Route
-            path="/search/:searchInput"
+            path="/search"
             element={
               <SearchResult
                 setShowList={setShowList}

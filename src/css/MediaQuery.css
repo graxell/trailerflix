@@ -144,8 +144,8 @@
     background: none;
   }
 
-  .showInfo__background {
-    margin: 0 200px;
+  .navRight__dropDown--trigger {
+    right: 80px;
   }
 
   .header__searchBar--container {
@@ -156,6 +156,10 @@
     top: 10px;
     right: 70px;
     padding: 5px 10px;
+  }
+
+  .showInfo__background {
+    margin: 0 200px;
   }
 }
 
