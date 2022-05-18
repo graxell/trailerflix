@@ -37,8 +37,6 @@ const CreateAccount = (props) => {
     });
   };
 
-  console.log(input, input.length);
-
   return (
     <>
       <div className="signUp__container">
@@ -101,10 +99,6 @@ const CreateAccount = (props) => {
             inputStyle={"input__light"}
           />
           <p className="signUp--alert error"></p>
-
-          {password && password.error && (
-            <PasswordChecklist password={password.data} />
-          )}
         </div>
 
         {/* -- CONFIRM PASSWORD -- */}
@@ -141,6 +135,10 @@ const CreateAccount = (props) => {
           )}
 
         {isSuccess && <SuccessMessage />}
+
+        {password && password.error && (
+          <PasswordChecklist password={password.data} />
+        )}
       </div>
     </>
   );

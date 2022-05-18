@@ -13,10 +13,7 @@ const Signin = (props) => {
     password: "",
   });
 
-  const { setIsSignedIn } = props;
   const { email, password } = signInDetails;
-
-  console.log(signInDetails);
 
   const navigate = useNavigate();
 
@@ -36,7 +33,6 @@ const Signin = (props) => {
 
   const onSignIn = (email, password) => {
     signInReq(email, password).then((result) => {
-      console.log(result);
       if (result === true) {
         navigate("/profiles");
       } else {
@@ -45,8 +41,7 @@ const Signin = (props) => {
     });
   };
 
-  const key = Object.values(signInDetails);
-  console.log(key);
+  // const key = Object.values(signInDetails);
 
   return (
     <>
@@ -88,8 +83,6 @@ const Signin = (props) => {
             </p>
           </div>
         </div>
-
-        {/* <DisplayProfile /> */}
       </div>
     </>
   );

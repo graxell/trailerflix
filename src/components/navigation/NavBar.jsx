@@ -12,6 +12,7 @@ const NavBar = (props) => {
     isSignedIn,
     onAssignProfile,
     updateWatchList,
+    token,
   } = props;
   return (
     <>
@@ -32,8 +33,8 @@ const NavBar = (props) => {
         isSignedIn={isSignedIn}
         onAssignProfile={onAssignProfile}
         updateWatchList={updateWatchList}
+        token={token}
       />
-      {/* <button onClick={onSignOut}>Logout</button> */}
     </>
   );
 };

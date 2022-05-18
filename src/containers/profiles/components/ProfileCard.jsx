@@ -2,20 +2,9 @@ import React from "react";
 import edit_icon from "../../../assets/images/edit_icon.png";
 import add_profile_icon from "../../../assets/images/add_profile_icon.svg";
 import ProfilePic from "./ProfilePic";
-import { useNavigate } from "react-router-dom";
 
 const ProfileCard = (props) => {
-  const {
-    list,
-    setProfiles,
-    profiles,
-    setManageAll,
-    manageAll,
-    setIsSignedIn,
-    onAssignProfile,
-  } = props;
-
-  const navigate = useNavigate();
+  const { list, profiles, setManageAll, manageAll, onAssignProfile } = props;
 
   const onManage = (profile) => {
     setManageAll({
@@ -24,8 +13,6 @@ const ProfileCard = (props) => {
       newProfileName: profile.profile_name,
     });
   };
-
-  console.log(profiles);
 
   return (
     <>

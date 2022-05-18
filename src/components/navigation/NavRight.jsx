@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import edit_icon from "../../assets/images/edit_icon.png";
 import account_icon from "../../assets/images/account_icon.png";
 import ProfilePic from "../../containers/profiles/components/ProfilePic";
 import Search from "./Search";
+import SignInNav from "./SignInNav";
 import { useNavigate } from "react-router-dom";
 import { getProfileIndex } from "../../utils/AccountsUtils";
 import { onSignOut } from "../../controllers/dbController";
@@ -19,6 +20,7 @@ const NavRight = (props) => {
     setIsSignedIn,
     isSignedIn,
     onAssignProfile,
+    token,
   } = props;
   const { assigned } = profiles;
 
@@ -41,6 +43,11 @@ const NavRight = (props) => {
     <>
       <div className="navRight--container">
         <Search setShowList={setShowList} profiles={profiles} />
+
+        {!isSignedIn && window.location.pathname !== "/profiles" && (
+          <SignInNav />
+        )}
+
         {isSignedIn && (
           <>
             <div className="navRight__dropDown--trigger">
@@ -89,6 +96,7 @@ const NavRight = (props) => {
                 <img
                   src={edit_icon}
                   className="profile__picture picture__navSmall"
+                  alt="edit icon"
                 />
 
                 <p>Manage Profiles</p>
@@ -101,6 +109,7 @@ const NavRight = (props) => {
                 <img
                   src={account_icon}
                   className="profile__picture picture__navSmall"
+                  alt="account icon"
                 />
 
                 <p>Account</p>

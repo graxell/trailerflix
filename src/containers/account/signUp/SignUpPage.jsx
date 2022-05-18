@@ -14,9 +14,12 @@ const SignupPage = (props) => {
 
   const onSignUp = async () => {
     try {
-      const response = await axios.post("http://localhost:6065/emailCheck/", {
-        email: signUpEmail,
-      });
+      const response = await axios.post(
+        "https://api.trailerflix.co/emailCheck/",
+        {
+          email: signUpEmail,
+        }
+      );
 
       if (response.data.status === 0) {
         setSignUpEmail({

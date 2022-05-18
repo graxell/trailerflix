@@ -37,17 +37,18 @@ function App() {
   const [showList, setShowList] = useState(); //list based on genre/search result
   const [myList, setMyList] = useState([]);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [token, setToken] = useState(false);
   const [profiles, setProfiles] = useState({});
 
   //   ---- [ useEffect CALLS ] ----   //
 
   useEffect(() => {
     getAuth();
+    checkProfiles();
   }, []);
 
   useEffect(() => {
-    checkProfiles();
-    updateWatchList();
+    profiles.assigned && updateWatchList();
   }, [profiles.assigned]);
 
   //determine is a user is logged in
@@ -56,6 +57,7 @@ function App() {
 
     if (token) {
       setIsSignedIn(true);
+      setToken(true);
     } else {
       setIsSignedIn(false);
     }
@@ -164,7 +166,6 @@ function App() {
     setShow({});
   };
 
-  console.log(myList);
   return (
     <>
       <header>
@@ -188,6 +189,7 @@ function App() {
           isSignedIn={isSignedIn}
           onAssignProfile={onAssignProfile}
           updateWatchList={updateWatchList}
+          token={token}
         />
 
         {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />}

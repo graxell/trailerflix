@@ -92,6 +92,7 @@ button {
   position: absolute;
   left: 0;
   right: 0;
+  bottom: -30px;
   z-index: 5;
   background: white;
   border-radius: 5px;
@@ -103,7 +104,7 @@ button {
 }
 
 .signUp__field__requirements > li {
-  font-size: small;
+  font-size: 0.7em;
   padding: 2px;
 }
 
@@ -215,12 +216,17 @@ button {
 
 .nav__signIn__btn {
   position: absolute;
-  top: 10px;
+  top: 8px;
   right: 20px;
-  background-color: red;
-  font-weight: bold;
-  padding: 5px 15px;
+  font-size: 0.3em;
+  padding: 2px 5px;
   border-radius: 3px;
+  background-color: red;
+}
+
+.nav__signIn__btn:hover {
+  background-color: white;
+  color: black;
 }
 
 /* input */
@@ -391,7 +397,7 @@ button {
   top: 100px;
   right: 50px;
   left: 50px;
-  bottom: 100px;
+  /* bottom: 150px; */
   background-color: var(--backgroundDark);
   border-radius: 8px;
   padding: 30px;

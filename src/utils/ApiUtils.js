@@ -8,15 +8,6 @@ const details_to_append =
 
 module.exports = {
   //HOMEPAGE LISTS API URL
-  //   trending: `${endpoint_url}trending/all/day?${api_key}${default_params}`,
-
-  //   popularSeries: `${endpoint_url}tv/popular?${api_key}${default_params}`,
-
-  //   popularMovies: `${endpoint_url}movie/popular?${api_key}${default_params}`,
-
-  //   topRatedMovies: `${endpoint_url}movie/top_rated?${api_key}${default_params}`,
-
-  //   topRatedSeries: `${endpoint_url}tv/top_rated?${api_key}${default_params}`,
 
   TRENDING_URL: `${endpoint_url}trending/all/day?${api_key}${default_params}`,
 

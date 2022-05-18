@@ -13,8 +13,6 @@ const Profiles = (props) => {
     getProfiles().then((result) => setProfiles({ ...profiles, all: result }));
   }, []);
 
-  console.log(profiles);
-
   return (
     <>
       <div className="profiles__container">
