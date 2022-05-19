@@ -32,8 +32,6 @@ const Show = (props) => {
     aboutShow.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  console.log(show);
-
   return (
     <>
       {/* top of the page - poster & titles */}

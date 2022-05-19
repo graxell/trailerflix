@@ -15,8 +15,6 @@ const ExtendedDetails = (props) => {
   };
 
   const newKeys = Object.keys(newArr);
-  console.log(newArr, newKeys);
-
   return (
     <>
       {newKeys &&

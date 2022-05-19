@@ -48,8 +48,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    profiles.assigned && updateWatchList();
-  }, [profiles.assigned]);
+    profiles && profiles.assigned && updateWatchList();
+  }, [profiles, profiles.assigned]);
 
   //determine is a user is logged in
   const getAuth = () => {
@@ -191,8 +191,6 @@ function App() {
           updateWatchList={updateWatchList}
           token={token}
         />
-
-        {/* {!isSignedIn && window.location.pathname !== "/signin" && <SignInNav />} */}
       </header>
 
       <main>

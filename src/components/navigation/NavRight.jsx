@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import edit_icon from "../../assets/images/edit_icon.png";
 import account_icon from "../../assets/images/account_icon.png";
 import ProfilePic from "../../containers/profiles/components/ProfilePic";
@@ -20,7 +20,6 @@ const NavRight = (props) => {
     setIsSignedIn,
     isSignedIn,
     onAssignProfile,
-    token,
   } = props;
   const { assigned } = profiles;
 
@@ -30,13 +29,14 @@ const NavRight = (props) => {
       return item.profile_name !== assigned;
     });
 
-  const signOut = () => {
-    onSignOut().then((result) => {
-      if (!result) {
-        setIsSignedIn(false);
-        navigate("/signin");
-      }
-    });
+  const signOut = async () => {
+    const response = await onSignOut();
+
+    if (response) {
+      await setIsSignedIn(false);
+      await setProfiles({});
+      navigate("/signin");
+    }
   };
 
   return (

@@ -41,8 +41,6 @@ const Signin = (props) => {
     });
   };
 
-  // const key = Object.values(signInDetails);
-
   return (
     <>
       <div className="signIn__container image__background">

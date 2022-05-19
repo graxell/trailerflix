@@ -17,7 +17,7 @@ const Search = (props) => {
       const response = await axios.get(searchURL(searchInput));
       setShowList({ shows: response.data.results, topic: searchInput });
 
-      navigate(`/search/:${searchInput}`);
+      navigate(`/search`);
       console.log(response.data.results);
     } catch (error) {
       console.log("Error", error);

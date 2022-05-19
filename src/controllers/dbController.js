@@ -88,7 +88,7 @@ export const onSignOut = async function () {
 
     if (response.data.status === 1) {
       localStorage.clear();
-      return false;
+      return true;
     }
   } catch (error) {
     console.log(error);
