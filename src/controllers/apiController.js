@@ -7,7 +7,7 @@ const DEFAULT_PARAM =
   "&language=en-US&sort_by=popularity.desc&include_video=false&page=1";
 
 export const getShowList = async (urlParam) => {
-  const URL = ENDPOINT_URL + urlParam + API_KEY + DEFAULT_PARAM;
+  const URL = `${ENDPOINT_URL}${urlParam}${API_KEY}${DEFAULT_PARAM}`;
 
   try {
     const list = await axios.get(URL);

@@ -9,35 +9,29 @@ const NewAndPopular = (props) => {
 
   const { setBanner, banner, addButtonHandler, show, setShow } = props;
 
+  //   ---- [ useEffect CALLS ] ----   //
   useEffect(() => {
-    getShowList("tv/airing_today?").then((result) =>
-      setNewAndPopularShows((prevState) => {
-        return { ...prevState, airingToday: result };
-      })
-    );
-
-    getShowList("movie/now_playing?").then((result) =>
-      setNewAndPopularShows((prevState) => {
-        return { ...prevState, latest: result };
-      })
-    );
-
-    getShowList("tv/on_the_air?").then((result) =>
-      setNewAndPopularShows((prevState) => {
-        return { ...prevState, ongoingTv: result };
-      })
-    );
-
-    getShowList("movie/upcoming?").then((result) =>
-      setNewAndPopularShows((prevState) => {
-        return { ...prevState, upcoming: result };
-      })
-    );
+    fetchNewPopularList("tv/airing_today?", "airingToday");
+    fetchNewPopularList("movie/now_playing?", "latest");
+    fetchNewPopularList("tv/on_the_air?", "ongoingTv");
+    fetchNewPopularList("movie/upcoming?", "upcoming");
   }, []);
 
   useEffect(() => {
     setBanner(randomBanner(newAndPopularShows.upcoming));
   }, [newAndPopularShows.upcoming]);
+
+  // getting api data function
+  const fetchNewPopularList = async (urlParam, key) => {
+    const result = await getShowList(urlParam);
+    if (result) {
+      setNewAndPopularShows((prevState) => {
+        return { ...prevState, [key]: result };
+      });
+    } else {
+      return "Cannot retrieve this list right now";
+    }
+  };
 
   return (
     <>

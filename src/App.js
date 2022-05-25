@@ -3,7 +3,6 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Show from "./containers/show/Show";
 import Homepage from "./containers/homepage/Homepage";
 import NavBar from "./components/navigation/NavBar";
-// import SignInNav from "./components/navigation/SignInNav";
 import Series from "./containers/seriesAndFilms/Series";
 import Films from "./containers/seriesAndFilms/Films";
 import NewAndPopular from "./containers/newAndPopular/NewAndPopular";
@@ -51,7 +50,7 @@ function App() {
     profiles && profiles.assigned && updateWatchList();
   }, [profiles, profiles.assigned]);
 
-  //determine is a user is logged in
+  //determine if a user is logged in
   const getAuth = () => {
     const token = localStorage.getItem("token");
 

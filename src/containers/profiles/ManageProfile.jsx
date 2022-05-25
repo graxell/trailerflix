@@ -21,7 +21,7 @@ const ManageProfile = (props) => {
     if (!error) {
       const edited = await onProfileEdit(
         currentProfileName,
-        "profile_name",
+        `profile_name`,
         newProfileName
       );
 
@@ -93,6 +93,8 @@ const ManageProfile = (props) => {
     }
   };
 
+  console.log(manageAll);
+
   return (
     <>
       <div className="profile__manage--container">
@@ -122,7 +124,7 @@ const ManageProfile = (props) => {
 
             <div className="profile__edit--buttons">
               <Button
-                onClick={!toConfirm ? onEdit : ""}
+                onClick={!toConfirm ? onEdit : null}
                 styleName={"profiles__btn whiteRed__btn"}
                 btnName={"Continue"}
               />

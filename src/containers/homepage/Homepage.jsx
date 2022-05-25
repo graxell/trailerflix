@@ -9,42 +9,30 @@ const Homepage = (props) => {
 
   const { addButtonHandler, setShow, setBanner, banner, show } = props;
 
-  //FETCHING API
+  //   ---- [ useEffect CALLS ] ----   //
   useEffect(() => {
-    getShowList("trending/all/day?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, trending: result };
-      })
-    );
-
-    getShowList("movie/popular?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, popularMovies: result };
-      })
-    );
-
-    getShowList("tv/popular?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, popularSeries: result };
-      })
-    );
-
-    getShowList("movie/top_rated?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, topRatedMovies: result };
-      })
-    );
-
-    getShowList("tv/top_rated?").then((result) =>
-      setHomepageLists((prevState) => {
-        return { ...prevState, topRatedSeries: result };
-      })
-    );
+    fetchHomepageList("trending/all/day?", "trending");
+    fetchHomepageList("movie/popular?", "popularMovies");
+    fetchHomepageList("tv/popular?", "popularSeries");
+    fetchHomepageList("movie/top_rated?", "topRatedMovies");
+    fetchHomepageList("tv/top_rated?", "topRatedSeries");
   }, []);
 
   useEffect(() => {
     setBanner(randomBanner(homepageLists.trending));
   }, [homepageLists.trending]);
+
+  // getting api data function
+  const fetchHomepageList = async (urlParam, key) => {
+    const result = await getShowList(urlParam);
+    if (result) {
+      setHomepageLists((prevState) => {
+        return { ...prevState, [key]: result };
+      });
+    } else {
+      return "Cannot retrieve this list right now";
+    }
+  };
 
   return (
     <>

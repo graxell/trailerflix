@@ -15,7 +15,7 @@ const PasswordUpdate = (props) => {
     <>
       <div className="account__update--container">
         <div className="account__update inner__wrapper">
-          <h2>HERE!</h2>
+          <h2>Update Password</h2>
           <div className="account__update--form">
             <InputField
               type={"password"}

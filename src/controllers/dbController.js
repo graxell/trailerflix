@@ -80,6 +80,27 @@ export const signInReq = async function (email, password) {
   }
 };
 
+export const deleteAccount = async function (email, password) {
+  try {
+    const response = await axios.post(
+      "https://api.trailerflix.co/delete/",
+      {
+        email: email,
+        password: password,
+      },
+      { headers: { token: localStorage.getItem("token") } }
+    );
+
+    if (response.data.status === 1) {
+      return true;
+    } else {
+      return { error: response.data.error };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const onSignOut = async function () {
   try {
     const response = await axios.delete(`https://api.trailerflix.co/signout/`, {
@@ -117,7 +138,7 @@ export const getProfiles = async function () {
 export const onProfileEdit = async function (profileName, type, payload) {
   try {
     const response = await axios.patch(
-      "https://api.trailerflix.co/edit-profile/",
+      "http://localhost:6065/edit-profile/",
       { currentProfileName: profileName, type: type, payload: payload },
 
       { headers: { token: localStorage.getItem("token") } }
@@ -136,7 +157,7 @@ export const onProfileEdit = async function (profileName, type, payload) {
 export const onAddProfile = async (profileName) => {
   try {
     const response = await axios.post(
-      "https://api.trailerflix.co/add-profile/",
+      "http://localhost:6065/add-profile/",
       { profile_name: profileName },
       { headers: { token: localStorage.getItem("token") } }
     );
